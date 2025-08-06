@@ -1,0 +1,17 @@
+
+.link{
+    text-decoration: none;
+    color:white;
+    font-family: 'DMSans-medium', sans-serif;
+    font-size: large;
+}
+
+.menulink{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-decoration: none;
+    color:black;
+    font-family: 'DMSans-medium', sans-serif;
+    font-size: large;
+}

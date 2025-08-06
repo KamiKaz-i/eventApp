@@ -1,0 +1,14 @@
+@font-face {
+  font-family: DMSans-light;
+  src: url("/fonts/DMSans-Light.ttf");
+}
+@font-face {
+  font-family: DMSans-medium;
+  src: url("/fonts/DMSans-Medium.ttf");
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
