@@ -253,7 +253,7 @@ export default function CreateEvent() {
                 mt: "3rem ",
               }}
             >
-              Create
+              Create BB
             </Button>
           </Stack>
         </Paper>
