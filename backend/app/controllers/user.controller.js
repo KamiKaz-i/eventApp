@@ -55,7 +55,7 @@ export const get = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Fail!",
+      message: "Fail",
       error: error.message,
     });
   }
@@ -73,7 +73,7 @@ export const setStatus = async (req, res) => {
     res.sendStatus(200);
   } catch (error) {
     res.status(500).json({
-      message: "server error",
+      message: "Server error",
       error: error.message,
     });
   }
@@ -93,7 +93,7 @@ export const status = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "server error",
+      message: "Server error",
       error: error.message,
     });
   }
@@ -140,7 +140,7 @@ export const login = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({
-      message: "server error",
+      message: "Server error",
       error: error.message,
     });
   }

@@ -17,22 +17,40 @@ import { useContext } from "react";
 import { userContext } from "../contexts/userContext";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuItem from "@mui/material/MenuItem";
 export default function CreateEvent() {
   const { user } = useContext(userContext);
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questionArray, setQuestionArray] = useState([
+    "What are we calling this little venture?",
+    "So what's the deal with this thing? The details, the goods...",
+    "What kinda trouble is this?",
+    "When do I need to be there? Give me the day.",
+    "How many people are coming to this shindig?",
+    "Where's the gold? I mean, where's the spot?",
+    "How much is it gonna cost? I'm not doing this for free.",
+  ]);
   const [selectOption, setSelectOption] = useState("Other");
   const [createEventForm, setCreateEventForm] = useState({
     title: "",
     description: "",
     date: dayjs(),
-    totalTickets: 1,
-    location: "",
+    totalTickets: 0,
     type: "gallery",
-    price: 1,
+    price: 0,
+  });
+  const [isInputEmpty, setIsInputEmpty] = useState(() => {
+    let tmp = {};
+    questionArray.forEach((el, index) => {
+      tmp[index] = true;
+    });
+    return tmp;
   });
   async function submit(e) {
     console.log(user);
+
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
@@ -50,7 +68,6 @@ export default function CreateEvent() {
           description: createEventForm.description,
           date: createEventForm.date,
           total_tickets: createEventForm.totalTickets,
-          location: createEventForm.location,
           price: createEventForm.price,
           type: createEventForm.type,
         }),
@@ -74,37 +91,67 @@ export default function CreateEvent() {
       <Navbar />
       <Stack
         direction="column"
-        alignItems="center"
         sx={{
           width: "100%",
           maxWidth: "800px",
           mx: "auto",
-          p: { xs: 2, sm: 3, md: 4 },
+          p: { sm: 3, md: 4 },
+
           flex: 1,
         }}
       >
         <Paper
           elevation={3}
           sx={{
+            display: "flex",
+            alignItems: "center",
             width: "100%",
+            height: "500px",
             p: 4,
             borderRadius: 3,
             bgcolor: "background.paper",
             boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
           }}
         >
+          {questionIndex > 0 ? (
+            <Button
+              onClick={() => {
+                setQuestionIndex((questionIndex) => questionIndex - 1);
+              }}
+              sx={{
+                height: "64px",
+                borderRadius: "100%",
+                margin: "0",
+                padding: "0",
+                color: "black",
+              }}
+            >
+              <ArrowBackIcon sx={{ position: "relative" }}></ArrowBackIcon>
+            </Button>
+          ) : (
+            <Box
+              sx={{
+                height: "64px",
+                width: "64px",
+                margin: "0px",
+                padding: "0px",
+              }}
+            ></Box>
+          )}
+
           <Stack
             spacing={{ lg: 3, xs: 3, sm: 2 }}
             useFlexGap
             sx={{
+              height: "500px",
               flex: 1,
-              alignContent: "center",
               alignItems: "center",
             }}
           >
             <Typography
               variant="h4"
               sx={{
+                mt: 10,
                 mb: 4,
                 fontWeight: 400,
                 color: "black",
@@ -112,150 +159,270 @@ export default function CreateEvent() {
             >
               Event info
             </Typography>
+            {questionIndex === 0 && (
+              <>
+                <p>{questionArray[questionIndex]}</p>
+                <TextField
+                  sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
+                  onChange={(e) => {
+                    setCreateEventForm({
+                      ...createEventForm,
+                      [e.target.name]: e.target.value,
+                    });
+                    e.target.value != ""
+                      ? setIsInputEmpty({
+                          ...isInputEmpty,
+                          [questionIndex]: false,
+                        })
+                      : setIsInputEmpty({
+                          ...isInputEmpty,
+                          [questionIndex]: true,
+                        });
+                  }}
+                  value={createEventForm.title}
+                  required
+                  variant="outlined"
+                  color="black"
+                  name="title"
+                  label="Title"
+                  size="medium"
+                ></TextField>
+              </>
+            )}
+            {questionIndex === 1 && (
+              <>
+                <p>{questionArray[questionIndex]}</p>
+                <TextField
+                  sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
+                  onChange={(e) => {
+                    setCreateEventForm({
+                      ...createEventForm,
+                      [e.target.name]: e.target.value,
+                    });
+                    e.target.value != ""
+                      ? setIsInputEmpty({
+                          ...isInputEmpty,
+                          [questionIndex]: false,
+                        })
+                      : setIsInputEmpty({
+                          ...isInputEmpty,
+                          [questionIndex]: true,
+                        });
+                  }}
+                  required
+                  value={createEventForm.description}
+                  variant="outlined"
+                  name="description"
+                  label="Description"
+                  size="medium"
+                  color="black"
+                ></TextField>
+              </>
+            )}
+            {questionIndex === 2 && (
+              <>
+                <p>{questionArray[questionIndex]}</p>
+                <FormControl
+                  color="black"
+                  sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
+                >
+                  <InputLabel id="Event-type">Event Type</InputLabel>
+                  <Select
+                    onChange={(e) => {
+                      console.log(e.target.name);
+                      setCreateEventForm({
+                        ...createEventForm,
+                        [e.target.name]: e.target.value,
+                      });
+                      setSelectOption(e.target.value);
+                      e.target.value != ""
+                        ? setIsInputEmpty({
+                            ...isInputEmpty,
+                            [questionIndex]: false,
+                          })
+                        : setIsInputEmpty({
+                            ...isInputEmpty,
+                            [questionIndex]: true,
+                          });
+                    }}
+                    value={selectOption}
+                    name="type"
+                    label="type"
+                  >
+                    <MenuItem value={"Concert"}>Concert</MenuItem>
+                    <MenuItem value={"Gallery"}>Gallery</MenuItem>
+                    <MenuItem value={"Theatre"}>Theatre</MenuItem>
+                    <MenuItem value={"Cinema"}>Cinema</MenuItem>
+                    <MenuItem value={"Other"}>Other</MenuItem>
+                  </Select>
+                </FormControl>
+              </>
+            )}
+            {questionIndex === 3 && (
+              <>
+                <p>{questionArray[questionIndex]}</p>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    disablePast
+                    minDate={dayjs()}
+                    defaultValue={dayjs()}
+                    slotProps={{
+                      textField: {
+                        required: true,
+                        readOnly: true,
+                      },
+                    }}
+                    sx={{
+                      width: { lg: "50%", md: "50%", xs: "75%" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          border: "2px solid black",
+                        },
+                      },
+                      "& .MuiInputLabel-root.Mui-focused": {
+                        color: "black",
+                      },
+                    }}
+                    name="date"
+                    onChange={(newValue) => {
+                      console.log(newValue);
+                      setCreateEventForm({
+                        ...createEventForm,
+                        date: `${newValue.$M + 1}/${newValue.$D}/${
+                          newValue.$y
+                        }`,
+                      });
 
-            <TextField
-              sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
-              onChange={(e) => {
-                setCreateEventForm({
-                  ...createEventForm,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-              required
-              variant="outlined"
-              color="black"
-              name="title"
-              label="Title"
-              size="medium"
-            ></TextField>
-            <TextField
-              sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
-              onChange={(e) => {
-                setCreateEventForm({
-                  ...createEventForm,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-              required
-              variant="outlined"
-              name="description"
-              label="Description"
-              size="medium"
-              color="black"
-            ></TextField>
-            <FormControl
-              color="black"
-              sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
-            >
-              <InputLabel id="Event-type">Event Type</InputLabel>
-              <Select
-                onChange={(e) => {
-                  console.log(e.target.name);
-                  setCreateEventForm({
-                    ...createEventForm,
-                    [e.target.name]: e.target.value,
-                  });
-                  setSelectOption(e.target.value);
-                }}
-                value={selectOption}
-                name="type"
-                label="type"
-              >
-                <MenuItem value={"Concert"}>Concert</MenuItem>
-                <MenuItem value={"Gallery"}>Gallery</MenuItem>
-                <MenuItem value={"Theatre"}>Theatre</MenuItem>
-                <MenuItem value={"Cinema"}>Cinema</MenuItem>
-                <MenuItem value={"Other"}>Other</MenuItem>
-              </Select>
-            </FormControl>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                disablePast
-                minDate={dayjs()}
-                defaultValue={dayjs()}
-                slotProps={{
-                  textField: {
-                    required: true,
-                    readOnly: true,
-                  },
-                }}
-                sx={{
-                  width: { lg: "50%", md: "50%", xs: "75%" },
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      border: "2px solid black",
+                      setIsInputEmpty({
+                        ...isInputEmpty,
+                        [questionIndex]: false,
+                      });
+                    }}
+                    label="Event Date"
+                  />
+                </LocalizationProvider>
+              </>
+            )}
+            {questionIndex === 4 && (
+              <>
+                <p>{questionArray[questionIndex]}</p>
+                <TextField
+                  sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
+                  value={createEventForm.totalTickets}
+                  onChange={(e) => {
+                    const amount = e.target.value;
+                    const regex = /^[1-9]\d{0,4}$/;
+                    if (regex.test(amount) || amount === "") {
+                      setCreateEventForm({
+                        ...createEventForm,
+                        [e.target.name]: amount,
+                      });
+                      e.target.value != ""
+                        ? setIsInputEmpty({
+                            ...isInputEmpty,
+                            [questionIndex]: false,
+                          })
+                        : setIsInputEmpty({
+                            ...isInputEmpty,
+                            [questionIndex]: true,
+                          });
+                    }
+                  }}
+                  variant="outlined"
+                  name="totalTickets"
+                  label="Total Tickets"
+                  size="medium"
+                  color="black"
+                  required
+                ></TextField>
+              </>
+            )}
+            {questionIndex === 5 && (
+              <>
+                <p>{questionArray[questionIndex]}</p>
+                <TextField
+                  required
+                  sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
+                  value={createEventForm.price}
+                  onChange={(e) => {
+                    const amount = e.target.value;
+                    const regex = /^[1-9]\d{0,4}(\.\d{0,2})?$/;
+                    if (regex.test(amount) || amount === "") {
+                      setCreateEventForm({
+                        ...createEventForm,
+                        [e.target.name]: amount,
+                      });
+                      e.target.value != ""
+                        ? setIsInputEmpty({
+                            ...isInputEmpty,
+                            [questionIndex]: false,
+                          })
+                        : setIsInputEmpty({
+                            ...isInputEmpty,
+                            [questionIndex]: true,
+                          });
+                    }
+                  }}
+                  variant="outlined"
+                  name="price"
+                  label="Price"
+                  size="medium"
+                  color="black"
+                ></TextField>
+                <Button
+                  disabled={isInputEmpty[questionIndex]}
+                  variant="contained"
+                  type="submit"
+                  size="large"
+                  onClick={() => {
+                    console.log(createEventForm);
+                  }}
+                  sx={{
+                    position: "relative",
+                    bottom: "0px",
+                    px: 6,
+                    py: 1.5,
+                    mt: 3,
+                    borderRadius: 1,
+                    textTransform: "none",
+                    fontWeight: 600,
+                    bgcolor: "#3f3f3f",
+                    ":hover": {
+                      bgcolor: "#5f5f5f",
                     },
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": {
-                    color: "black",
-                  },
-                }}
-                name="date"
-                onChange={(newValue) => {
-                  setCreateEventForm({
-                    ...createEventForm,
-                    date: `${newValue.$W}/${newValue.$D}/${newValue.$y}`,
-                  });
-                }}
-                label="Event Date"
-              />
-            </LocalizationProvider>
-            <TextField
-              sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
-              value={createEventForm.totalTickets}
-              onChange={(e) => {
-                const amount = e.target.value;
-                const regex = /^[1-9]\d{0,4}$/;
-                if (regex.test(amount) || amount === "") {
-                  setCreateEventForm({
-                    ...createEventForm,
-                    [e.target.name]: amount,
-                  });
-                }
-              }}
-              variant="outlined"
-              name="totalTickets"
-              label="Total Tickets"
-              size="medium"
-              color="black"
-              required
-            ></TextField>
-            <TextField
-              required
-              sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
-              value={createEventForm.price}
-              onChange={(e) => {
-                const amount = e.target.value;
-                const regex = /^[1-9]\d{0,4}(\.\d{0,2})?$/;
-                if (regex.test(amount) || amount === "") {
-                  setCreateEventForm({
-                    ...createEventForm,
-                    [e.target.name]: amount,
-                  });
-                }
-              }}
-              variant="outlined"
-              name="price"
-              label="Price"
-              size="medium"
-              color="black"
-            ></TextField>
+                  }}
+                >
+                  Create
+                </Button>
+              </>
+            )}
+          </Stack>
+          {questionIndex < questionArray.length - 2 ? (
             <Button
-              variant="contained"
-              type="submit"
-              size="large"
+              disabled={isInputEmpty[questionIndex]}
+              onClick={() => {
+                setQuestionIndex((questionIndex) => questionIndex + 1);
+              }}
               sx={{
-                bgcolor: "#3f3f3f",
-                ":hover": {
-                  bgcolor: "#5f5f5f",
-                },
-                width: { lg: "12%", md: "20%", xs: "35%" },
-                mt: "3rem ",
+                height: "64px",
+                borderRadius: "100%",
+                margin: "0",
+                padding: "0",
+                color: "black",
               }}
             >
-              Create BB
+              <ArrowForwardIcon></ArrowForwardIcon>
             </Button>
-          </Stack>
+          ) : (
+            <Box
+              sx={{
+                height: "64px",
+                width: "64px",
+                margin: "0px",
+                padding: "0px",
+              }}
+            ></Box>
+          )}
         </Paper>
       </Stack>
     </Box>

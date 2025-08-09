@@ -87,7 +87,7 @@ export default function Cart() {
           </Stack>
         </Paper>
 
-        <Box sx={{ flex: 1, width: "100%", position: "sticky", top: 20 }}>
+        <Box sx={{ flex: 1, width: "100%", position: "sticky", top: 90 }}>
           <OrderSummary order={order} />
         </Box>
       </Stack>
