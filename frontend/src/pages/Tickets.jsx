@@ -20,8 +20,11 @@ export default function Tickets() {
             },
           }
         );
+
         if (response.ok) {
           const orders = await response.json();
+          console.log(orders);
+
           setOrders(orders);
         }
       } catch (error) {

@@ -3,13 +3,10 @@ import * as orderRepository from "../repositories/order.repository.js";
 import * as ticketRepository from "../repositories/ticket.repository.js";
 export const getOrderTicket = async (userId) => {
   try {
-    console.log(userId);
-
     const result = await orderRepository.getOrder({
       user_id: userId,
       status: "pending",
     });
-    console.log(result);
 
     let order = result[0];
     if (!order) {
@@ -17,7 +14,6 @@ export const getOrderTicket = async (userId) => {
       err.code = "ORDER_NOT_FOUND";
       throw err;
     }
-    console.log("2");
     const orderTickets = await orderTicketRepository.getOrderTicket(order.id);
     if (!orderTickets) {
       const err = new Error("ticket not found");
