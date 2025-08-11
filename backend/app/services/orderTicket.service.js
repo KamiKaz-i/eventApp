@@ -8,14 +8,16 @@ export const getOrderTicket = async (userId) => {
     });
     let order = result[0];
     if (!order) {
-      console.log("not found");
-
-      throw new Error(`Order not found`);
+      const err = new Error("order not found");
+      err.code = "ORDER_NOT_FOUND";
+      throw err;
     }
 
     const orderTickets = await orderTicketRepository.getOrderTicket(order.id);
     if (!orderTickets) {
-      throw new Error(`Ticket not found`);
+      const err = new Error("ticket not found");
+      err.code = "TICKET_NOT_FOUND";
+      throw err;
     }
     return { orderTickets, order };
   } catch (error) {
@@ -24,6 +26,8 @@ export const getOrderTicket = async (userId) => {
 };
 
 export const deleteOrderTicket = async (ticketOrderId) => {
+  console.log(`TICKET ORDER ID --------------------- ${ticketOrderId}`);
+
   try {
     const orderTicket = await orderTicketRepository.getOneOrderTicket(
       ticketOrderId
@@ -50,9 +54,7 @@ export const deleteOrderTicket = async (ticketOrderId) => {
     if (remainingTickets === 0) {
       await orderRepository.deleteOrder({ id: order.dataValues.id });
     }
-
-    res.status(200).json({ message: "deleted" });
   } catch (error) {
-    res.status(500).json({ error });
+    console.log(error);
   }
 };

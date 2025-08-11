@@ -10,7 +10,16 @@ export const getOrderTicket = async (req, res) => {
     const result = await orderTicketService.getOrderTicket(userId);
     res.status(200).json(result);
   } catch (error) {
-    res.status(500).json({ error });
+    if (error.code === "ORDER_NOT_FOUND") {
+      console.log(
+        `------------------*******************************************************************${error.code}`
+      );
+
+      return res.status(404).json({ message: "Order not found" });
+    }
+    console.log(error);
+
+    // res.status(500).json({ error });
   }
 };
 export const deleteOrderTicket = async (req, res) => {

@@ -3,6 +3,29 @@ const Order = db.Order;
 const OrderTicket = db.Order_ticket;
 const Ticket = db.Ticket;
 const Event = db.Event;
+export const getOneOrder = async (options) => {
+  try {
+    const orders = await Order.findOne({
+      where: {
+        ...options,
+      },
+      include: [
+        {
+          model: OrderTicket,
+          include: [
+            {
+              model: Ticket,
+              include: [Event],
+            },
+          ],
+        },
+      ],
+    });
+    return orders;
+  } catch (error) {
+    throw new Error(`db error ${error}`);
+  }
+};
 export const getOrder = async (options) => {
   try {
     const orders = await Order.findAll({

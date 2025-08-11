@@ -96,9 +96,7 @@ export const putEvent = async (eventId, eventInfo) => {
     }
 
     if (isNaN(parsedPrice)) {
-      return res
-        .status(400)
-        .json({ message: "no valid price provided to update." });
+      throw new Error("no valid price provided to update.");
     }
     if (Object.keys(updatedEvent).length === 0) {
       throw new Error(`no valid fields provided to update.`);
