@@ -12,10 +12,11 @@ export const getOrderTicket = async (orderId) => {
   });
   return result;
 };
-export const getOneOrderTicket = async (ticketOrderId) => {
+export const getOneOrderTicket = async (options) => {
   const orderTicket = await OrderTicket.findOne({
     where: {
-      id: ticketOrderId,
+      ...options,
+      //id: ticketOrderId,
     },
   });
   return orderTicket;
@@ -37,5 +38,38 @@ export const remainingTickets = async (options) => {
     return remainingTickets;
   } catch (error) {
     throw new Error(error);
+  }
+};
+export const updateOrderTicket = async (options, updatedTicket) => {
+  try {
+    await OrderTicket.update(
+      {
+        ...updatedTicket,
+      },
+      {
+        where: {
+          ...options,
+        },
+      }
+    );
+  } catch (error) {}
+};
+
+export const createTicket = async (options, defaults) => {
+  try {
+    const result = await OrderTicket.findOrCreate({
+      where: {
+        ...options,
+      },
+      defaults: {
+        ...defaults,
+      },
+    });
+    console.log(result);
+
+    return result;
+  } catch (error) {
+    error.code = "112312";
+    throw error; // rzuć dalej, żeby kontroler mógł go obsłużyć
   }
 };

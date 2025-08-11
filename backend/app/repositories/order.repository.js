@@ -44,17 +44,15 @@ export const getOrder = async (options) => {
         },
       ],
     });
+
     return orders;
   } catch (error) {
     throw new Error(`db error ${error}`);
   }
 };
-export const increment = async (options, subtotalPrice) => {
+export const increment = async (options, inc) => {
   try {
-    await Order.increment(
-      { total_price: -subtotalPrice },
-      { where: { ...options } }
-    );
+    await Order.increment({ ...inc }, { where: { ...options } });
   } catch (error) {
     throw new Error(error);
   }
@@ -65,4 +63,15 @@ export const deleteOrder = async (options) => {
   } catch (error) {
     throw new Error(error);
   }
+};
+export const findOrCreate = async (options, defaults) => {
+  const order = await Order.findOrCreate({
+    where: {
+      ...options,
+    },
+    defaults: {
+      ...defaults,
+    },
+  });
+  return order;
 };
