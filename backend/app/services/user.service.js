@@ -36,7 +36,7 @@ export const get = async () => {
     throw new Error(`something went wrong ${error}`);
   }
 };
-//nie ma znaczenie czy duze czy male znaki w loginie do sprawdzenia
+
 export const login = async (user) => {
   try {
     const result = await userRepository.getUser(user.username);

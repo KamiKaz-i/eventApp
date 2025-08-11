@@ -8,29 +8,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [isFirstLogin, setIsFirstLogin] = useState(0);
   const [loginFormData, setLoginFormData] = useState({
     username: "",
     password: "",
   });
-
-  async function setUserStatus() {
-    try {
-      const token = localStorage.getItem("token");
-      await fetch(`http://localhost:3000/api/users/status`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          isFirstLogin,
-        }),
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
   async function submit(e) {
     e.preventDefault();
     try {
@@ -49,13 +30,7 @@ export default function Login() {
 
       if (res.authenticated) {
         localStorage.setItem("token", res.token);
-        if (res.isFirstLogin === 1) {
-          setIsFirstLogin(1);
-          setUserStatus();
-          navigate("/events");
-        } else if (res.isFirstLogin === 0) {
-          navigate("/events");
-        }
+        navigate("/events");
       }
     } catch (error) {
       console.log("error : ", error);

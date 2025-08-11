@@ -1,5 +1,5 @@
 import db from "../config/db.config.js";
-
+import * as orderTicketService from "../services/orderTicket.service.js";
 let Order = db.Order;
 let OrderTicket = db.Order_ticket;
 let Ticket = db.Ticket;
@@ -7,26 +7,8 @@ let Event = db.Event;
 export const getOrderTicket = async (req, res) => {
   try {
     let userId = req.params.userId;
-    const order = await Order.findOne({
-      where: {
-        user_id: userId,
-        status: "pending",
-      },
-    });
-
-    if (!order) {
-      return res.status(404).json({ message: "order not found" });
-    }
-    const orderTickets = await OrderTicket.findAll({
-      where: {
-        order_id: order.id,
-      },
-      include: [{ model: Ticket, include: [{ model: Event }] }],
-    });
-    if (!orderTickets) {
-      return res.status(404).json({ message: "Ticket not found" });
-    }
-    res.status(200).json({ orderTickets, order });
+    const result = await orderTicketService.getOrderTicket(userId);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error });
   }
@@ -34,38 +16,7 @@ export const getOrderTicket = async (req, res) => {
 export const deleteOrderTicket = async (req, res) => {
   try {
     let ticketOrderId = req.params.ticketOrderId;
-
-    const orderTicket = await OrderTicket.findOne({
-      where: {
-        id: ticketOrderId,
-      },
-    });
-    if (!orderTicket) {
-      return res.status(404).json({ message: "Order ticket not found" });
-    }
-
-    const order = await Order.findOne({
-      where: { id: orderTicket.order_id },
-    });
-
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-    await Order.increment(
-      { total_price: -orderTicket.dataValues.subtotal_price },
-      { where: { id: order.id } }
-    );
-    await OrderTicket.destroy({
-      where: { id: ticketOrderId },
-    });
-    const remainingTickets = await OrderTicket.count({
-      where: { order_id: order.dataValues.id },
-    });
-
-    if (remainingTickets === 0) {
-      await Order.destroy({ where: { id: order.dataValues.id } });
-    }
-
+    await orderTicketService.deleteOrderTicket(ticketOrderId);
     res.status(200).json({ message: "deleted" });
   } catch (error) {
     res.status(500).json({ error });

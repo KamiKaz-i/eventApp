@@ -44,6 +44,8 @@ export default function EventDetails() {
       }
 
       const eventData = await response.json();
+      console.log(eventData.owner);
+
       setEvent(eventData);
     } catch (err) {
       setError(err.message);

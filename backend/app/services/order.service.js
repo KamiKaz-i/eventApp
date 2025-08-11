@@ -1,6 +1,6 @@
 import * as orderRepository from "../repositories/order.repository.js";
 export const getOrder = async (userId) => {
-  const orders = await orderRepository.getOrder(userId);
+  const orders = await orderRepository.getOrder({ id: userId, status: "paid" });
   let tickets = {};
   for (let order of orders) {
     for (let orderTicket of order.Order_tickets) {
