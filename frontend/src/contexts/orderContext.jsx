@@ -29,7 +29,7 @@ export const OrderProvider = ({ children }) => {
       const res = await response.json();
       console.log(res);
 
-      if (res.message === "order not found") {
+      if (res.message === "Order not found") {
         setOrderTickets([]);
       }
       if (response.ok) {

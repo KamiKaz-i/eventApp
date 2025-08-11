@@ -70,6 +70,8 @@ export default function OrderTicketCard({ orderTicket }) {
           },
         }
       );
+      console.log(response);
+
       if (response.ok) {
         fetchOrders();
       }

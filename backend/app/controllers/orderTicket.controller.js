@@ -4,31 +4,15 @@ let Order = db.Order;
 let OrderTicket = db.Order_ticket;
 let Ticket = db.Ticket;
 let Event = db.Event;
-
 export const getOrderTicket = async (req, res) => {
   try {
     let userId = req.params.userId;
-    const order = await Order.findOne({
-      where: {
-        user_id: userId,
-        status: "pending",
-      },
-    });
-
-    if (!order) {
-      return res.status(404).json({ message: "order not found" });
-    }
-    const orderTickets = await OrderTicket.findAll({
-      where: {
-        order_id: order.id,
-      },
-      include: [{ model: Ticket, include: [{ model: Event }] }],
-    });
-    if (!orderTickets) {
-      return res.status(404).json({ message: "Ticket not found" });
-    }
-    res.status(200).json({ orderTickets, order });
+    const result = await orderTicketService.getOrderTicket(userId);
+    res.status(200).json(result);
   } catch (error) {
+    if (error.code === "ORDER_NOT_FOUND") {
+      return res.status(404).json({ message: "Order not found" });
+    }
     res.status(500).json({ error });
   }
 };

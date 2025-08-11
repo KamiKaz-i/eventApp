@@ -26,8 +26,6 @@ export const getOrderTicket = async (userId) => {
 };
 
 export const deleteOrderTicket = async (ticketOrderId) => {
-  console.log(`TICKET ORDER ID --------------------- ${ticketOrderId}`);
-
   try {
     const orderTicket = await orderTicketRepository.getOneOrderTicket(
       ticketOrderId
@@ -41,7 +39,6 @@ export const deleteOrderTicket = async (ticketOrderId) => {
     if (!order) {
       throw new Error("Order not found");
     }
-    console.log(order);
     await orderRepository.increment(
       { id: order.id },
       orderTicket.dataValues.subtotal_price
