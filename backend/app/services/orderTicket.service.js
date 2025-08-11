@@ -21,7 +21,7 @@ export const getOrderTicket = async (userId) => {
     }
     return { orderTickets, order };
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -55,6 +55,6 @@ export const deleteOrderTicket = async (ticketOrderId) => {
       await orderRepository.deleteOrder({ id: order.dataValues.id });
     }
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };

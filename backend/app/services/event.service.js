@@ -15,7 +15,7 @@ export const deleteEvent = async (eventId, userId) => {
     }
     await eventRepository.deleteEvent(eventId);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -36,7 +36,7 @@ export const getEvent = async (eventId) => {
     eventres.owner = eventOwner.name;
     return eventres;
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -48,7 +48,7 @@ export const getEvents = async () => {
     }
     return events;
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -60,7 +60,7 @@ export const getMyEvents = async (userId) => {
     }
     return events;
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -73,7 +73,7 @@ export const postEvent = async (event, ticket) => {
     });
     return { message: "noice", data: result.dataValues };
   } catch (error) {
-    throw new Error(`${error},${result}`);
+    throw error;
   }
 };
 
@@ -104,6 +104,6 @@ export const putEvent = async (eventId, eventInfo) => {
     await ticketRepository.updateTicket(eventId, parsedPrice);
     await eventRepository.updateEvent(updatedEvent, eventId);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };

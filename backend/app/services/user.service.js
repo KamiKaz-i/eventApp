@@ -24,7 +24,7 @@ export const register = async (user) => {
     }
     return { userCreated: true, user: newUser.dataValues };
   } catch (error) {
-    throw new Error(`something went wrong ${error}`);
+    throw error;
   }
 };
 
@@ -33,7 +33,7 @@ export const get = async () => {
     const results = await userRepository.getAllUsers();
     return results;
   } catch (error) {
-    throw new Error(`something went wrong ${error}`);
+    throw error;
   }
 };
 
@@ -63,6 +63,6 @@ export const login = async (user) => {
       throw new Error(`invalid credentials`);
     }
   } catch (error) {
-    throw new Error(`something went wrong ${error}`);
+    throw error;
   }
 };
