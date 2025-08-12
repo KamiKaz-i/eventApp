@@ -16,7 +16,6 @@ export const getOneOrderTicket = async (options) => {
   const orderTicket = await OrderTicket.findOne({
     where: {
       ...options,
-      //id: ticketOrderId,
     },
   });
   return orderTicket;
@@ -65,11 +64,9 @@ export const createTicket = async (options, defaults) => {
         ...defaults,
       },
     });
-    console.log(result);
-
     return result;
   } catch (error) {
     error.code = "112312";
-    throw error; // rzuć dalej, żeby kontroler mógł go obsłużyć
+    throw error;
   }
 };
