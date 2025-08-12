@@ -6,7 +6,6 @@ import OrderSummary from "../components/Cart/OrderSummary";
 import Navbar from "../components/Navbar/Navbar";
 export default function Cart() {
   const [orderTickets, , , order] = useContext(orderContext);
-  console.log(orderTickets);
 
   if (orderTickets.length === 0) {
     return (

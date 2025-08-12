@@ -6,16 +6,18 @@ import * as walletRepository from "../repositories/wallet.repository.js";
 export const register = async (user) => {
   try {
     let wallet = {};
+
     if (user.username.length === 0 || user.password.length === 0) {
       throw new Error("to short credentials");
     }
-    const users = await userRepository.getUser(user.username);
-    if (users.length > 0) {
+    const userByName = await userRepository.getUserByName(user.username);
+    if (userByName) {
       throw new Error("User with this name already exists");
     }
     const hashedPassword = await bcrypt.hash(user.password, 10);
     user.password = hashedPassword;
     user.isFirstLogin = 1;
+
     const newUser = await userRepository.createUser(user);
     if (newUser.dataValues.id) {
       wallet.user_id = newUser.dataValues.id;
@@ -39,13 +41,11 @@ export const get = async () => {
 
 export const login = async (user) => {
   try {
-    const result = await userRepository.getUser(user.username);
-
-    if (result.length === 0) {
+    const result = await userRepository.getUserByName(user.username);
+    if (!result) {
       throw new Error(`invalid credentials`);
     }
-    const userD = result[0].dataValues;
-    let isAuthenticated = await bcrypt.compare(user.password, userD.password);
+    let isAuthenticated = await bcrypt.compare(user.password, result.password);
     if (isAuthenticated) {
       let token = jwt.sign(
         {
@@ -57,7 +57,7 @@ export const login = async (user) => {
         username: user.username,
         token: token,
         authenticated: true,
-        isFirstLogin: userD.isFirstLogin,
+        isFirstLogin: result.isFirstLogin,
       };
     } else {
       throw new Error(`invalid credentials`);

@@ -5,13 +5,22 @@ export const getAllUsers = async () => {
   const allUsers = await User.findAll();
   return allUsers;
 };
-export const getUser = async (options) => {
-  const user = await User.findAll({
+export const getUserById = async (userId) => {
+  const user = await User.findOne({
     where: {
-      ...options,
+      id: userId,
     },
   });
-  return user[0].dataValues;
+  return user;
+};
+export const getUserByName = async (username) => {
+  const user = await User.findOne({
+    where: {
+      name: username,
+    },
+  });
+
+  return user;
 };
 
 export const createUser = async (user) => {

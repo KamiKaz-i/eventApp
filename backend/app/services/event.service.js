@@ -28,12 +28,12 @@ export const getEvent = async (eventId) => {
     if (!event) {
       throw new Error(`event not found`);
     }
-    let eventOwner = await userRepository.getUser({
-      id: event.dataValues.organizer_id,
-    });
+    let eventOwner = await userRepository.getUserById(
+      event.dataValues.organizer_id
+    );
+    console.log(eventOwner);
 
-    let eventres = { ...event.dataValues };
-    eventres.owner = eventOwner.name;
+    let eventres = { ...event.dataValues, owner: eventOwner.name };
     return eventres;
   } catch (error) {
     throw error;
