@@ -16,3 +16,10 @@ export const createWallet = async (wallet) => {
   const usersWallet = await Wallet.create(wallet);
   return usersWallet;
 };
+
+export const getWalletByPk = async (walletId, dbTransaction) => {
+  const wallet = await Wallet.findByPk(walletId, {
+    transaction: dbTransaction,
+  });
+  return wallet;
+};

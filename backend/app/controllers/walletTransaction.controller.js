@@ -92,7 +92,16 @@ export const postTransaction = async (req, res) => {
             include: [
               {
                 model: Event,
-                include: [{ model: User, include: [{ model: Wallet }] }],
+                include: [
+                  {
+                    model: User,
+                    include: [
+                      {
+                        model: Wallet,
+                      },
+                    ],
+                  },
+                ],
               },
             ],
           },
