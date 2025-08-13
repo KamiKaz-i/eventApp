@@ -23,3 +23,14 @@ export const getWalletByPk = async (walletId, dbTransaction) => {
   });
   return wallet;
 };
+export const increment = async (walletId, therealamount, dbTransaction) => {
+  await Wallet.increment(
+    { balance: therealamount },
+    {
+      where: {
+        id: walletId,
+      },
+      transaction: dbTransaction,
+    }
+  );
+};

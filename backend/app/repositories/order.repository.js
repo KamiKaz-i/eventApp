@@ -5,6 +5,8 @@ const Ticket = db.Ticket;
 const Event = db.Event;
 export const getOneOrder = async (options) => {
   try {
+    console.log(options);
+
     const orders = await Order.findOne({
       where: {
         ...options,

@@ -1,9 +1,4 @@
-import db from "../config/db.config.js";
 import * as orderService from "../services/order.service.js";
-const Order = db.Order;
-const OrderTicket = db.Order_ticket;
-const Ticket = db.Ticket;
-const Event = db.Event;
 
 export const getOrder = async (req, res) => {
   try {

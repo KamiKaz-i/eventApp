@@ -13,4 +13,14 @@ walletTransactionRouter.post(
   authorization,
   walletTransaction.postTransaction
 );
+walletTransactionRouter.post(
+  "/deposit",
+  authorization,
+  walletTransaction.postDeposit
+);
+walletTransactionRouter.post(
+  "/withdraw",
+  authorization,
+  walletTransaction.postWithdraw
+);
 export default walletTransactionRouter;

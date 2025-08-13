@@ -1,6 +1,10 @@
 import * as orderTicketRepository from "../repositories/orderTicket.repository.js";
 import * as orderRepository from "../repositories/order.repository.js";
 import * as ticketRepository from "../repositories/ticket.repository.js";
+import db from "../config/db.config.js";
+let OrderTicket = db.Order_ticket;
+let Ticket = db.Ticket;
+let Event = db.Event;
 export const getOrderTicket = async (userId) => {
   try {
     const result = await orderRepository.getOrder({
@@ -14,7 +18,12 @@ export const getOrderTicket = async (userId) => {
       err.code = "ORDER_NOT_FOUND";
       throw err;
     }
-    const orderTickets = await orderTicketRepository.getOrderTicket(order.id);
+    const orderTickets = await orderTicketRepository.getOrderTicket({
+      where: {
+        order_id: order.id,
+      },
+      include: [{ model: Ticket, include: [{ model: Event }] }],
+    });
     if (!orderTickets) {
       const err = new Error("ticket not found");
       err.code = "TICKET_NOT_FOUND";
@@ -29,7 +38,19 @@ export const getOrderTicket = async (userId) => {
 export const deleteOrderTicket = async (ticketOrderId) => {
   try {
     const orderTicket = await orderTicketRepository.getOneOrderTicket({
-      id: ticketOrderId,
+      where: {
+        id: ticketOrderId,
+      },
+      include: [
+        {
+          model: Ticket,
+          include: [
+            {
+              model: Event,
+            },
+          ],
+        },
+      ],
     });
 
     if (!orderTicket) {
@@ -56,16 +77,28 @@ export const deleteOrderTicket = async (ticketOrderId) => {
     throw error;
   }
 };
+
 export const putOrderTicket = async (quantity, ticketOrderId) => {
   try {
     const orderTicket = await orderTicketRepository.getOneOrderTicket({
-      id: ticketOrderId,
+      where: {
+        id: ticketOrderId,
+      },
+      include: [
+        {
+          model: Ticket,
+          include: [
+            {
+              model: Event,
+            },
+          ],
+        },
+      ],
     });
 
     if (!orderTicket) {
       throw new Error("Order ticket not found");
     }
-
     const order = await orderRepository.getOneOrder({
       id: orderTicket.order_id,
     });
@@ -113,9 +146,22 @@ export const putOrderTicket = async (quantity, ticketOrderId) => {
     const updatedOrder = await orderRepository.getOneOrder({
       id: order.dataValues.id,
     });
+
     const updatedOrderTicket = await orderTicketRepository.getOneOrderTicket({
-      order_id: order.id,
-      ticket_id: orderTicket.dataValues.ticket_id,
+      where: {
+        order_id: order.id,
+        ticket_id: orderTicket.dataValues.ticket_id,
+      },
+      include: [
+        {
+          model: Ticket,
+          include: [
+            {
+              model: Event,
+            },
+          ],
+        },
+      ],
     });
     return {
       order: updatedOrder.dataValues,

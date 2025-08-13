@@ -3,21 +3,12 @@ let OrderTicket = db.Order_ticket;
 let Ticket = db.Ticket;
 let Event = db.Event;
 
-export const getOrderTicket = async (orderId) => {
-  const result = await OrderTicket.findAll({
-    where: {
-      order_id: orderId,
-    },
-    include: [{ model: Ticket, include: [{ model: Event }] }],
-  });
+export const getOrderTicket = async (queryParameters) => {
+  const result = await OrderTicket.findAll(queryParameters);
   return result;
 };
-export const getOneOrderTicket = async (options) => {
-  const orderTicket = await OrderTicket.findOne({
-    where: {
-      ...options,
-    },
-  });
+export const getOneOrderTicket = async (queryParameters) => {
+  const orderTicket = await OrderTicket.findOne(queryParameters);
   return orderTicket;
 };
 export const deleteOrderTicket = async (options) => {

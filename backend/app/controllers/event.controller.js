@@ -61,8 +61,6 @@ export const getEvents = async (req, res) => {
   }
 };
 export const getMyEvents = async (req, res) => {
-  console.log(req.user);
-
   try {
     let events = await eventService.getMyEvents(req.user.id);
     res.status(200).json(events);
@@ -75,7 +73,6 @@ export const getMyEvents = async (req, res) => {
 };
 export const postEvent = async (req, res) => {
   try {
-    console.log(req.body);
     let event = {
       organizer_id: req.body.organizer_id,
       title: req.body.title,

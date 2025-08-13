@@ -31,7 +31,7 @@ export default function WalletDialog({
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          "http://localhost:3000/api/wallet-transactions",
+          `http://localhost:3000/api/wallet-transactions/${actionType}`,
           {
             method: "POST",
             headers: {
