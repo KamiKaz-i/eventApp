@@ -5,7 +5,7 @@ import * as walletRepository from "../repositories/wallet.repository.js";
 
 export const register = async (user) => {
   try {
-    let wallet = {};
+    const wallet = {};
 
     if (user.username.length === 0 || user.password.length === 0) {
       throw new Error("to short credentials");
@@ -45,9 +45,12 @@ export const login = async (user) => {
     if (!result) {
       throw new Error(`invalid credentials`);
     }
-    let isAuthenticated = await bcrypt.compare(user.password, result.password);
+    const isAuthenticated = await bcrypt.compare(
+      user.password,
+      result.password
+    );
     if (isAuthenticated) {
-      let token = jwt.sign(
+      const token = jwt.sign(
         {
           username: user.username,
         },

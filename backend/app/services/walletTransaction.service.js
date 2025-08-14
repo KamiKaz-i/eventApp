@@ -17,7 +17,7 @@ export const getTransactions = async (walletId) => {
 export const deposit = async (walletId, amount, transactionType) => {
   try {
     const dbTransaction = await db.sequelize.transaction();
-    let transaction = {
+    const transaction = {
       wallet_id: walletId,
       amount: amount,
       transaction_type: transactionType,
@@ -40,7 +40,7 @@ export const deposit = async (walletId, amount, transactionType) => {
 export const withdraw = async (walletId, amount, transactionType) => {
   try {
     const dbTransaction = await db.sequelize.transaction();
-    let transaction = {
+    const transaction = {
       wallet_id: walletId,
       amount: amount,
       transaction_type: transactionType,
@@ -49,7 +49,7 @@ export const withdraw = async (walletId, amount, transactionType) => {
       walletId,
       dbTransaction
     );
-    let newBalance = parseFloat(currentBalance.dataValues.balance) - amount;
+    const newBalance = parseFloat(currentBalance.dataValues.balance) - amount;
     if (newBalance < 0) {
       await dbTransaction.rollback();
       throw new Error("insufficient funds");
@@ -81,7 +81,7 @@ export const purchase = async (walletId, transactionType, orderId) => {
       throw new Error("orderTickets not found in order");
     }
 
-    let sellerEarnings = {};
+    const sellerEarnings = {};
     let totalPrice = 0;
 
     for (let orderTicket of orderTickets) {
@@ -102,7 +102,7 @@ export const purchase = async (walletId, transactionType, orderId) => {
       await dbTransaction.rollback();
       throw new Error("Insufficient funds");
     }
-    let transaction = {
+    const transaction = {
       wallet_id: walletId,
       amount: totalPrice,
       transaction_type: transactionType,
