@@ -1,10 +1,10 @@
 import * as walletTransactionRepository from "../repositories/walletTransaction.repository.js";
 import * as walletRepository from "../repositories/wallet.repository.js";
-import db from "../config/db.config.js";
 import * as orderRepository from "../repositories/order.repository.js";
 import * as orderTicketRepository from "../repositories/orderTicket.repository.js";
 import * as paymentRepository from "../repositories/payment.reposistory.js";
 import * as ticketRepository from "../repositories/ticket.repository.js";
+import db from "../config/db.config.js";
 export const getTransactions = async (walletId) => {
   try {
     const walletTransactions =
@@ -73,32 +73,10 @@ export const withdraw = async (walletId, amount, transactionType) => {
 export const purchase = async (walletId, transactionType, orderId) => {
   try {
     const dbTransaction = await db.sequelize.transaction();
-    const orderTickets = await orderTicketRepository.getOrderTicket({
-      where: {
-        order_id: orderId,
-      },
-      include: [
-        {
-          model: db.Ticket,
-          include: [
-            {
-              model: db.Event,
-              include: [
-                {
-                  model: db.User,
-                  include: [
-                    {
-                      model: db.Wallet,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      transaction: dbTransaction,
-    });
+    const orderTickets = await orderTicketRepository.getOrderTicketWithUser(
+      orderId,
+      dbTransaction
+    );
     if (orderTickets.length === 0) {
       throw new Error("orderTickets not found in order");
     }
@@ -146,13 +124,8 @@ export const purchase = async (walletId, transactionType, orderId) => {
       );
       await walletRepository.increment(sellerWalletId, amount, dbTransaction);
     }
-    console.log(orderId);
 
-    const order = await orderRepository.getOneOrder({
-      id: orderId,
-    });
-
-    console.log(order);
+    const order = await orderRepository.getOneOrder(orderId);
 
     if (!order) {
       throw new Error("order doesnt exist");

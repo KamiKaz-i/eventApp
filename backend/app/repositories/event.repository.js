@@ -3,26 +3,41 @@ import db from "../config/db.config.js";
 const Event = db.Event;
 const Ticket = db.Ticket;
 
-export const getEvent = async (options, includeTicketInfo = false) => {
-  if (includeTicketInfo) {
-    const event = await Event.findOne({
-      include: [
-        {
-          model: Ticket,
-          attributes: ["quantity_available", "price", "id"],
-        },
-      ],
-      where: {
-        ...options,
-      },
-    });
-    return event;
-  } else {
-    const event = await Event.findOne(...options);
-    return event;
-  }
+export const getEvent = async (eventId) => {
+  const event = await Event.findOne({
+    where: {
+      id: eventId,
+    },
+  });
+  return event;
 };
-export const getEvents = async (options) => {
+export const getEventWithTicketInfo = async (eventId) => {
+  const event = await Event.findOne({
+    include: [
+      {
+        model: Ticket,
+        attributes: ["quantity_available", "price", "id"],
+      },
+    ],
+    where: {
+      id: eventId,
+    },
+  });
+
+  return event;
+};
+export const getEvents = async () => {
+  let events = await Event.findAll({
+    include: [
+      {
+        model: Ticket,
+        attributes: ["quantity_available", "price"],
+      },
+    ],
+  });
+  return events;
+};
+export const getMyEvents = async (userId) => {
   let events = await Event.findAll({
     include: [
       {
@@ -31,7 +46,7 @@ export const getEvents = async (options) => {
       },
     ],
     where: {
-      ...options,
+      organizer_id: userId,
     },
   });
   return events;

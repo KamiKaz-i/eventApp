@@ -3,8 +3,9 @@ const OrderTicket = db.Order_ticket;
 const Event = db.Event;
 const Ticket = db.Ticket;
 const Order = db.Order;
-export const createTicket = async (ticket) => {
-  const newTicket = await Ticket.create(ticket);
+export const createTicket = async (ticket, eventId) => {
+  let newTicket = { ...ticket, event_id: eventId };
+  await Ticket.create(newTicket);
 };
 export const updateTicket = async (eventId, parsedPrice) => {
   const updatedTicket = await Ticket.update(
@@ -26,10 +27,10 @@ export const updateTicketQuantityAvaiable = async (orderId) => {
   );
 };
 
-export const getTicket = async (options) => {
+export const getTicket = async (ticketId) => {
   const resultTicket = await Ticket.findOne({
     where: {
-      ...options,
+      id: ticketId,
     },
     include: [{ model: Event }],
   });

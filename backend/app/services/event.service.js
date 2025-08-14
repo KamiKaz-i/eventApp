@@ -6,7 +6,7 @@ export const deleteEvent = async (eventId, userId) => {
     if (!eventId) {
       throw new Error(`missing event Id`);
     }
-    const event = await eventRepository.getEvent({ id: eventId });
+    const event = await eventRepository.getEvent(eventId);
     if (!event) {
       throw new Error(`event not found`);
     }
@@ -24,15 +24,13 @@ export const getEvent = async (eventId) => {
     if (!eventId) {
       throw new Error(`missing eventId`);
     }
-    const event = await eventRepository.getEvent({ id: eventId }, true);
+    const event = await eventRepository.getEventWithTicketInfo(eventId);
     if (!event) {
       throw new Error(`event not found`);
     }
     let eventOwner = await userRepository.getUserById(
       event.dataValues.organizer_id
     );
-    console.log(eventOwner);
-
     let eventres = { ...event.dataValues, owner: eventOwner.name };
     return eventres;
   } catch (error) {
@@ -54,7 +52,7 @@ export const getEvents = async () => {
 
 export const getMyEvents = async (userId) => {
   try {
-    let events = await eventRepository.getEvents({ organizer_id: userId });
+    let events = await eventRepository.getMyEvents(userId);
     if (!events) {
       throw new Error(`events not found`);
     }
@@ -63,14 +61,10 @@ export const getMyEvents = async (userId) => {
     throw error;
   }
 };
-
 export const postEvent = async (event, ticket) => {
   try {
     const result = await eventRepository.createEvent(event);
-    await ticketRepository.createTicket({
-      ...ticket,
-      event_id: result.dataValues.id,
-    });
+    await ticketRepository.createTicket(ticket, result.dataValues.id);
     return { message: "noice", data: result.dataValues };
   } catch (error) {
     throw error;

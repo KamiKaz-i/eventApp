@@ -1,13 +1,6 @@
 import db from "../config/db.config.js";
 
 let WalletTransaction = db.Wallet_transaction;
-let Wallet = db.Wallet;
-let Payment = db.Payment;
-let Order = db.Order;
-let Ticket = db.Ticket;
-let OrderTicket = db.Order_ticket;
-let Event = db.Event;
-let User = db.User;
 
 export const getWalletTransactions = async (walletId) => {
   const walletTransactions = await WalletTransaction.findAll({
@@ -22,15 +15,4 @@ export const createTransaction = async (transaction, dbTransaction) => {
     transaction: dbTransaction,
   });
   return walletTransaction;
-};
-export const increment = async (walletId, therealamount, dbTransaction) => {
-  await Wallet.increment(
-    { balance: therealamount },
-    {
-      where: {
-        id: walletId,
-      },
-      transaction: dbTransaction,
-    }
-  );
 };

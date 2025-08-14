@@ -1,16 +1,10 @@
 import * as orderTicketRepository from "../repositories/orderTicket.repository.js";
 import * as orderRepository from "../repositories/order.repository.js";
 import * as ticketRepository from "../repositories/ticket.repository.js";
-import db from "../config/db.config.js";
-let OrderTicket = db.Order_ticket;
-let Ticket = db.Ticket;
-let Event = db.Event;
+
 export const getOrderTicket = async (userId) => {
   try {
-    const result = await orderRepository.getOrder({
-      user_id: userId,
-      status: "pending",
-    });
+    const result = await orderRepository.getPendingOrder(userId);
 
     let order = result[0];
     if (!order) {
@@ -18,12 +12,7 @@ export const getOrderTicket = async (userId) => {
       err.code = "ORDER_NOT_FOUND";
       throw err;
     }
-    const orderTickets = await orderTicketRepository.getOrderTicket({
-      where: {
-        order_id: order.id,
-      },
-      include: [{ model: Ticket, include: [{ model: Event }] }],
-    });
+    const orderTickets = await orderTicketRepository.getOrderTicket(order.id);
     if (!orderTickets) {
       const err = new Error("ticket not found");
       err.code = "TICKET_NOT_FOUND";
@@ -37,41 +26,28 @@ export const getOrderTicket = async (userId) => {
 
 export const deleteOrderTicket = async (ticketOrderId) => {
   try {
-    const orderTicket = await orderTicketRepository.getOneOrderTicket({
-      where: {
-        id: ticketOrderId,
-      },
-      include: [
-        {
-          model: Ticket,
-          include: [
-            {
-              model: Event,
-            },
-          ],
-        },
-      ],
-    });
+    const orderTicket = await orderTicketRepository.getOneOrderTicketById(
+      ticketOrderId
+    );
 
     if (!orderTicket) {
       throw new Error("Order ticket not found");
     }
-    const result = await orderRepository.getOrder({ id: orderTicket.order_id });
-    const order = result[0];
+    const [order, alreadyExisted] = await orderRepository.getOrderById(
+      orderTicket.order_id
+    );
+
     if (!order) {
       throw new Error("Order not found");
     }
-    await orderRepository.increment(
-      { id: order.id },
-      { total_price: -orderTicket.dataValues.subtotal_price }
+    await orderRepository.increment(order.id, -orderTicket.subtotal_price);
+    await orderTicketRepository.deleteOrderTicket(ticketOrderId);
+    const remainingTickets = await orderTicketRepository.remainingTickets(
+      order.id
     );
-    await orderTicketRepository.deleteOrderTicket({ id: ticketOrderId });
-    const remainingTickets = await orderTicketRepository.remainingTickets({
-      order_id: order.dataValues.id,
-    });
 
     if (remainingTickets === 0) {
-      await orderRepository.deleteOrder({ id: order.dataValues.id });
+      await orderRepository.deleteOrder(order.id);
     }
   } catch (error) {
     throw error;
@@ -80,40 +56,26 @@ export const deleteOrderTicket = async (ticketOrderId) => {
 
 export const putOrderTicket = async (quantity, ticketOrderId) => {
   try {
-    const orderTicket = await orderTicketRepository.getOneOrderTicket({
-      where: {
-        id: ticketOrderId,
-      },
-      include: [
-        {
-          model: Ticket,
-          include: [
-            {
-              model: Event,
-            },
-          ],
-        },
-      ],
-    });
+    const orderTicket = await orderTicketRepository.getOneOrderTicketById(
+      ticketOrderId
+    );
 
     if (!orderTicket) {
       throw new Error("Order ticket not found");
     }
-    const order = await orderRepository.getOneOrder({
-      id: orderTicket.order_id,
-    });
+    const order = await orderRepository.getOneOrder(orderTicket.order_id);
 
     if (!order) {
       throw new Error("Order not found ");
     }
-    const resultTicket = await ticketRepository.getTicket({
-      id: orderTicket.dataValues.ticket_id,
-    });
+    const resultTicket = await ticketRepository.getTicket(
+      orderTicket.ticket_id
+    );
     if (!resultTicket) {
       throw new Error("ticket not found 404");
     }
-    let priceOfTicket = resultTicket.dataValues.price;
-    let quantityAvailable = resultTicket.dataValues.quantity_available;
+    let priceOfTicket = resultTicket.price;
+    let quantityAvailable = resultTicket.quantity_available;
     let subtotalPrice = quantity * priceOfTicket;
 
     if (quantity > quantityAvailable) {
@@ -121,53 +83,26 @@ export const putOrderTicket = async (quantity, ticketOrderId) => {
     }
 
     await orderTicketRepository.updateOrderTicket(
-      {
-        order_id: order.dataValues.id,
-        ticket_id: orderTicket.dataValues.ticket_id,
-      },
-      {
-        quantity: quantity,
-        subtotal_price: subtotalPrice,
-      }
+      order.id,
+      orderTicket.ticket_id,
+      quantity,
+      subtotalPrice
     );
 
-    let updatedSubtotalPrice =
-      subtotalPrice - orderTicket.dataValues.subtotal_price;
+    let updatedSubtotalPrice = subtotalPrice - orderTicket.subtotal_price;
 
-    await orderRepository.increment(
-      {
-        id: order.dataValues.id,
-        status: "pending",
-      },
-      {
-        total_price: updatedSubtotalPrice,
-      }
+    await orderRepository.increment(order.id, updatedSubtotalPrice);
+    const updatedOrder = await orderRepository.getOneOrder(order.id);
+
+    const updatedOrderTicket = await orderTicketRepository.getOneOrderTicket(
+      order.id,
+      orderTicket.ticket_id
     );
-    const updatedOrder = await orderRepository.getOneOrder({
-      id: order.dataValues.id,
-    });
-
-    const updatedOrderTicket = await orderTicketRepository.getOneOrderTicket({
-      where: {
-        order_id: order.id,
-        ticket_id: orderTicket.dataValues.ticket_id,
-      },
-      include: [
-        {
-          model: Ticket,
-          include: [
-            {
-              model: Event,
-            },
-          ],
-        },
-      ],
-    });
     return {
-      order: updatedOrder.dataValues,
-      ticketId: orderTicket.dataValues.ticket_id,
+      order: updatedOrder,
+      ticketId: orderTicket.ticket_id,
       quantity: quantity,
-      orderTicket: updatedOrderTicket.dataValues,
+      orderTicket: updatedOrderTicket,
     };
   } catch (error) {
     throw error;
@@ -176,46 +111,31 @@ export const putOrderTicket = async (quantity, ticketOrderId) => {
 
 export const postOrderTicket = async (userId, ticketId, quantity) => {
   try {
-    const ticket = await ticketRepository.getTicket({
-      id: ticketId,
-    });
+    const ticket = await ticketRepository.getTicket(ticketId);
     if (ticket.Event.organizer_id === userId) {
       throw new Error("You can't buy tickets for your own event");
     }
-    let priceOfTicket = ticket.dataValues.price;
-    let quantityAvailable = ticket.dataValues.quantity_available;
+    let priceOfTicket = ticket.price;
+    let quantityAvailable = ticket.quantity_available;
     let subtotalPrice = quantity * priceOfTicket;
-    const order = await orderRepository.findOrCreate(
-      { user_id: userId, status: "pending" },
-      { total_price: 0 }
-    );
+    const [order, alreadyExisted] = await orderRepository.findOrCreate(userId);
     if (quantity > quantityAvailable) {
       throw new Error("insufficient quantity of tickets available");
     }
 
     const [orderTicket, createdOrderTicket] =
-      await orderTicketRepository.createTicket(
-        {
-          order_id: order[0].dataValues.id,
-          ticket_id: ticketId,
-        },
-        {
-          subtotal_price: subtotalPrice,
-          quantity: quantity,
-        }
+      await orderTicketRepository.createOrderTicket(
+        order.id,
+        ticketId,
+        subtotalPrice,
+        quantity
       );
     if (!createdOrderTicket) {
       throw new Error("Ticket is already in the cart");
     }
-    await orderRepository.increment(
-      {
-        user_id: userId,
-        status: "pending",
-      },
-      { total_price: subtotalPrice }
-    );
+    await orderRepository.increment(order.id, subtotalPrice);
     return {
-      order: order.dataValues,
+      order: order,
       ticketId: ticketId,
       quantity: quantity,
       orderTicket: orderTicket,
