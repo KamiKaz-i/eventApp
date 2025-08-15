@@ -13,17 +13,14 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
-import { useContext } from "react";
-import { userContext } from "../contexts/userContext";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuItem from "@mui/material/MenuItem";
 export default function CreateEvent() {
-  const { user } = useContext(userContext);
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [questionArray, setQuestionArray] = useState([
+  const [questionArray] = useState([
     "What are we calling this little venture?",
     "So what's the deal with this thing? The details, the goods...",
     "What kinda trouble is this?",
@@ -49,12 +46,10 @@ export default function CreateEvent() {
     return tmp;
   });
   async function submit(e) {
-    console.log(user);
-
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3000/api/events`, {
+      await fetch(`http://localhost:3000/api/events`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -63,7 +58,6 @@ export default function CreateEvent() {
         },
 
         body: JSON.stringify({
-          organizer_id: user.id,
           title: createEventForm.title,
           description: createEventForm.description,
           date: createEventForm.date,

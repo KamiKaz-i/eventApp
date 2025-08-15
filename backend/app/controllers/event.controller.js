@@ -4,8 +4,11 @@ const Event = db.Event;
 const Ticket = db.Ticket;
 const User = db.User;
 export const deleteEvent = async (req, res) => {
-  let eventId = req.params.eventId;
+  const eventId = req.params.eventId;
   const userId = req.user.id;
+  if (!eventId) {
+    return res.status(404).json({ message: "missing id of user" });
+  }
   try {
     await eventService.deleteEvent(eventId, userId);
     res.status(200).json({ message: "event deleted" });
@@ -17,17 +20,31 @@ export const deleteEvent = async (req, res) => {
   }
 };
 export const putEvent = async (req, res) => {
-  let eventId = req.params.eventId;
+  const eventId = req.params.eventId;
   const { title, description, date, price, type } = req.body;
-
+  if (!eventId) {
+    return res.status(400).json({ message: "missing id of user" });
+  }
+  if (!title || !description || !date || !price || !type) {
+    return res.status(400).json({ message: "missing event data" });
+  }
+  const parsedPrice = parseFloat(price);
+  if (isNaN(parsedPrice)) {
+    return res
+      .status(400)
+      .json({ message: "no valid price provided to update." });
+  }
   try {
-    await eventService.putEvent(eventId, {
-      title,
-      description,
-      date,
-      price,
-      type,
-    });
+    await eventService.putEvent(
+      eventId,
+      {
+        title,
+        description,
+        date,
+        type,
+      },
+      parsedPrice
+    );
     res.status(200).json({ message: "event updated" });
   } catch (error) {
     res.status(500).json({
@@ -37,7 +54,7 @@ export const putEvent = async (req, res) => {
   }
 };
 export const getEvent = async (req, res) => {
-  let eventId = req.params.eventId;
+  const eventId = req.params.eventId;
   try {
     const event = await eventService.getEvent(eventId);
 
@@ -62,7 +79,7 @@ export const getEvents = async (req, res) => {
 };
 export const getMyEvents = async (req, res) => {
   try {
-    let events = await eventService.getMyEvents(req.user.id);
+    const events = await eventService.getMyEvents(req.user.id);
     res.status(200).json(events);
   } catch (error) {
     res.status(500).json({
@@ -73,21 +90,24 @@ export const getMyEvents = async (req, res) => {
 };
 export const postEvent = async (req, res) => {
   try {
-    let event = {
-      organizer_id: req.body.organizer_id,
-      title: req.body.title,
-      description: req.body.description,
-      date: req.body.date,
-      total_tickets: req.body.total_tickets,
-      type: req.body.type,
+    const { title, description, date, total_tickets, type, price } = req.body;
+    if (!title || !description || !date || !price || !type || !total_tickets) {
+      return res.status(400).json({ message: "missing event data" });
+    }
+    const event = {
+      organizer_id: req.user.id,
+      title,
+      description,
+      date,
+      total_tickets,
+      type,
     };
-    let ticket = {
-      price: req.body.price,
-      quantity_available: req.body.total_tickets,
+    const ticket = {
+      price,
+      quantity_available: total_tickets,
     };
     const result = await eventService.postEvent(event, ticket);
     res.status(200).json({
-      message: "noice",
       data: result.dataValues,
     });
   } catch (error) {

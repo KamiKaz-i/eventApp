@@ -3,9 +3,6 @@ import * as userRepository from "../repositories/user.repository.js";
 import * as ticketRepository from "../repositories/ticket.repository.js";
 export const deleteEvent = async (eventId, userId) => {
   try {
-    if (!eventId) {
-      throw new Error(`missing event Id`);
-    }
     const event = await eventRepository.getEvent(eventId);
     if (!event) {
       throw new Error(`event not found`);
@@ -64,38 +61,16 @@ export const getMyEvents = async (userId) => {
 export const postEvent = async (event, ticket) => {
   try {
     const result = await eventRepository.createEvent(event);
-    await ticketRepository.createTicket(ticket, result.dataValues.id);
-    return { message: "noice", data: result.dataValues };
+    await ticketRepository.createTicket(ticket, result.id);
+    return { message: "noice", data: result };
   } catch (error) {
     throw error;
   }
 };
 
-export const putEvent = async (eventId, eventInfo) => {
-  const { title, description, date, price, type } = eventInfo;
-  const parsedPrice = parseFloat(price);
+export const putEvent = async (eventId, updatedEvent, price) => {
   try {
-    let updatedEvent = {};
-    if (title !== undefined) {
-      updatedEvent.title = title;
-    }
-    if (description !== undefined) {
-      updatedEvent.description = description;
-    }
-    if (date !== undefined) {
-      updatedEvent.date = date;
-    }
-    if (type !== undefined) {
-      updatedEvent.type = type;
-    }
-
-    if (isNaN(parsedPrice)) {
-      throw new Error("no valid price provided to update.");
-    }
-    if (Object.keys(updatedEvent).length === 0) {
-      throw new Error(`no valid fields provided to update.`);
-    }
-    await ticketRepository.updateTicket(eventId, parsedPrice);
+    await ticketRepository.updateTicket(eventId, price);
     await eventRepository.updateEvent(updatedEvent, eventId);
   } catch (error) {
     throw error;
