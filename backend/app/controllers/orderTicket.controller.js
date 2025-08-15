@@ -1,21 +1,16 @@
 import * as orderTicketService from "../services/orderTicket.service.js";
 export const getOrderTicket = async (req, res) => {
   try {
-    let userId = req.params.userId;
+    const userId = req.params.userId;
     const result = await orderTicketService.getOrderTicket(userId);
     res.status(200).json(result);
   } catch (error) {
-    if (error.code === "ORDER_NOT_FOUND") {
-      return res.status(404).json({ message: "Order not found" });
-    }
-    res.status(500).json({
-      message: error.message,
-    });
+    return res.status(404).json({ message: "Order not found" });
   }
 };
 export const deleteOrderTicket = async (req, res) => {
   try {
-    let ticketOrderId = req.params.ticketOrderId;
+    const ticketOrderId = req.params.ticketOrderId;
     await orderTicketService.deleteOrderTicket(ticketOrderId);
     res.status(200).json({ message: "deleted" });
   } catch (error) {
@@ -26,8 +21,8 @@ export const deleteOrderTicket = async (req, res) => {
 };
 export const putOrderTicket = async (req, res) => {
   try {
-    let quantity = req.body.quantity;
-    let ticketOrderId = req.params.ticketOrderId;
+    const quantity = req.body.quantity;
+    const ticketOrderId = req.params.ticketOrderId;
     const result = await orderTicketService.putOrderTicket(
       quantity,
       ticketOrderId
@@ -41,9 +36,9 @@ export const putOrderTicket = async (req, res) => {
 };
 export const postOrderTicket = async (req, res) => {
   try {
-    let userId = req.body.userId;
-    let ticketId = req.body.ticketId;
-    let quantity = req.body.quantity;
+    const userId = req.body.userId;
+    const ticketId = req.body.ticketId;
+    const quantity = req.body.quantity;
     const result = await orderTicketService.postOrderTicket(
       userId,
       ticketId,

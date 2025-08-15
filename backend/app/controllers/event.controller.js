@@ -1,8 +1,5 @@
-import db from "../config/db.config.js";
 import * as eventService from "../services/event.service.js";
-const Event = db.Event;
-const Ticket = db.Ticket;
-const User = db.User;
+
 export const deleteEvent = async (req, res) => {
   const eventId = req.params.eventId;
   const userId = req.user.id;
