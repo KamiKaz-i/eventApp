@@ -4,7 +4,7 @@ import WalletDialog from "./WalletDialog.jsx";
 import { useContext } from "react";
 import { walletContext } from "../../contexts/walletContext";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-
+import { url } from "../../url.jsx";
 function BalanceCard() {
   const { wallet, setWallet } = useContext(walletContext);
   const [open, setOpen] = useState(false);
@@ -12,7 +12,7 @@ function BalanceCard() {
   const getWallet = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3000/api/wallets", {
+      const response = await fetch(`${url}/api/wallets`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",

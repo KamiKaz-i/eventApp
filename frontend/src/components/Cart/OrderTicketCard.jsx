@@ -41,7 +41,7 @@ export default function OrderTicketCard({ orderTicket }) {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/order-tickets/${orderTicket.id}`,
+        `${url}/api/order-tickets/${orderTicket.id}`,
         {
           method: "PUT",
           headers: {
@@ -62,7 +62,7 @@ export default function OrderTicketCard({ orderTicket }) {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/order-tickets/${orderTicket.id}`,
+        `${url}/api/order-tickets/${orderTicket.id}`,
         {
           method: "DELETE",
           headers: {

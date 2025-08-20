@@ -58,7 +58,7 @@ export default function EventDetails() {
   const handleAddToCart = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3000/api/order-tickets`, {
+      const response = await fetch(`${url}/api/order-tickets`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
