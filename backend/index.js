@@ -7,7 +7,6 @@ import walletRouter from "./app/routers/wallet.routes.js";
 import orderRouter from "./app/routers/order.routes.js";
 import walletTransactionRouter from "./app/routers/walletTransaction.routes.js";
 import orderTicketRouter from "./app/routers/orderTicket.routes.js";
-import db from "./app/config/db.config.js";
 const app = express();
 
 //await db.sequelize.sync({ force: true });

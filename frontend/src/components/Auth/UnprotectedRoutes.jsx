@@ -7,6 +7,7 @@ export default function UnprotectedRoutes() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       validateUser(token);
     } else {
