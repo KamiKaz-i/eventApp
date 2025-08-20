@@ -14,6 +14,7 @@ import {
 import { useContext, useState } from "react";
 import { userContext } from "../../contexts/userContext";
 import { orderContext } from "../../contexts/orderContext";
+import { url } from "../../url.jsx";
 
 export default function OrderSummary({ order }) {
   const { user } = useContext(userContext);
@@ -25,21 +26,18 @@ export default function OrderSummary({ order }) {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:3000/api/wallet-transactions/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            walletId: user.walletId,
-            transactionType: "purchase",
-            orderId: order.id,
-          }),
-        }
-      );
+      const response = await fetch(`${url}/api/wallet-transactions/`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          walletId: user.walletId,
+          transactionType: "purchase",
+          orderId: order.id,
+        }),
+      });
 
       if (!response.ok) {
         const res = await response.json();

@@ -10,7 +10,7 @@ import {
   TextField,
   Stack,
 } from "@mui/material";
-
+import { url } from "../../url.jsx";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 export default function WalletDialog({
@@ -31,7 +31,7 @@ export default function WalletDialog({
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `http://localhost:3000/api/wallet-transactions/${actionType}`,
+          `${url}/api/wallet-transactions/${actionType}`,
           {
             method: "POST",
             headers: {

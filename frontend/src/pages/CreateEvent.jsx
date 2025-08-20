@@ -18,6 +18,7 @@ import InputLabel from "@mui/material/InputLabel";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuItem from "@mui/material/MenuItem";
+import { url } from "../url";
 export default function CreateEvent() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [questionArray] = useState([
@@ -49,7 +50,7 @@ export default function CreateEvent() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:3000/api/events`, {
+      await fetch(`${url}/api/events`, {
         method: "POST",
         credentials: "include",
         headers: {

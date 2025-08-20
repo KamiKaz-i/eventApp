@@ -2,21 +2,19 @@ import Navbar from "../components/Navbar/Navbar";
 import { useEffect, useState } from "react";
 import MyEventCard from "../components/Events/MyEventCard";
 import { Box, Stack } from "@mui/material";
+import { url } from "../url";
 export default function MyEvents() {
   const [events, setEvents] = useState([]);
   const getEvents = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        "http://localhost:3000/api/events/myEvents",
-        {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${url}/api/events/myEvents`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const events = await response.json();
 

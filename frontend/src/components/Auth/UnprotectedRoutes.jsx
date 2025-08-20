@@ -2,6 +2,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import { url } from "../../url";
 export default function UnprotectedRoutes() {
   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
@@ -16,16 +17,13 @@ export default function UnprotectedRoutes() {
   }, []);
   async function validateUser(token) {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/users/validate-token`,
-        {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${url}/api/users/validate-token`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) {
         console.log(`server returned status: ${response.status}`);
         setLoading(false);

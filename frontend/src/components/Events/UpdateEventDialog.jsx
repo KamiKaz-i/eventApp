@@ -17,6 +17,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { url } from "../../url.jsx";
 export default function UpdateEventDialog({
   open,
   handleClose,
@@ -37,23 +38,20 @@ export default function UpdateEventDialog({
     const updateEvent = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(
-          `http://localhost:3000/api/events/${event.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              title: updateEventForm.title,
-              description: updateEventForm.description,
-              date: updateEventForm.date,
-              price: updateEventForm.price,
-              type: updateEventForm.type,
-            }),
-          }
-        );
+        const response = await fetch(`${url}/api/events/${event.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title: updateEventForm.title,
+            description: updateEventForm.description,
+            date: updateEventForm.date,
+            price: updateEventForm.price,
+            type: updateEventForm.type,
+          }),
+        });
 
         if (response.ok) {
           getEvents();

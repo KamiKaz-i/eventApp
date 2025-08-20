@@ -21,6 +21,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import PersonIcon from "@mui/icons-material/Person";
+import { url } from "../url";
 export default function EventDetails() {
   const { user } = useContext(userContext);
   const [, , fetchOrders] = useContext(orderContext);
@@ -31,7 +32,7 @@ export default function EventDetails() {
   const getEvent = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3000/api/events/${id}`, {
+      const response = await fetch(`${url}/api/events/${id}`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",

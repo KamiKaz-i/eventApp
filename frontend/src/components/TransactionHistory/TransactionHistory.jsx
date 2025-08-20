@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { walletContext } from "../../contexts/walletContext";
 import TransactionTable from "./TransactionsTable";
 import dayjs from "dayjs";
+import { url } from "../../url.jsx";
 function TransactionHistory() {
   const { wallet } = useContext(walletContext);
   const [transactionHistory, setTransactionHistory] = useState([]);
@@ -15,7 +16,7 @@ function TransactionHistory() {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `http://localhost:3000/api/wallet-transactions/${wallet.id}`,
+          `${url}/api/wallet-transactions/${wallet.id}`,
           {
             method: "GET",
             headers: {

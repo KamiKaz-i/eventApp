@@ -5,6 +5,7 @@ import styles from "./Login.module.css";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { url } from "../url";
 export default function Login() {
   const navigate = useNavigate();
   const [registerFormData, setRegisterFormData] = useState({
@@ -15,7 +16,7 @@ export default function Login() {
   async function submit(e) {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/api/users/register`, {
+      const response = await fetch(`${url}/api/users/register`, {
         method: "POST",
         credentials: "include",
         headers: {

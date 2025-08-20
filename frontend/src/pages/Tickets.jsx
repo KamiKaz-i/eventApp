@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { Box, Grid } from "@mui/material";
 import { userContext } from "../contexts/userContext";
 import TicketCard from "../components/Tickets/TicketCard";
+import { url } from "../url";
 export default function Tickets() {
   const { user } = useContext(userContext);
   const [orders, setOrders] = useState([]);
@@ -10,16 +11,13 @@ export default function Tickets() {
     const getEvents = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(
-          `http://localhost:3000/api/order/user/${user.id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${url}/api/order/user/${user.id}`, {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.ok) {
           const orders = await response.json();

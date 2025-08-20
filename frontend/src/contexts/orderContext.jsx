@@ -3,6 +3,7 @@
 import { createContext } from "react";
 import { useState, useEffect, useContext } from "react";
 import { userContext } from "./userContext";
+import { url } from "../url";
 export const orderContext = createContext({});
 
 export const OrderProvider = ({ children }) => {
@@ -17,7 +18,7 @@ export const OrderProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/order-tickets/order/${user.id}`,
+        `${url}/api/order-tickets/order/${user.id}`,
         {
           method: "GET",
           headers: {

@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useContext } from "react";
+import { url } from "../../url.jsx";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { orderContext } from "../../contexts/orderContext";
 export default function OrderTicketCard({ orderTicket }) {
@@ -18,7 +19,7 @@ export default function OrderTicketCard({ orderTicket }) {
       if (orderTicket.quantity > 1) {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `http://localhost:3000/api/order-tickets/${orderTicket.id}`,
+          `${url}/api/order-tickets/${orderTicket.id}`,
           {
             method: "PUT",
             headers: {
