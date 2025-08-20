@@ -26,7 +26,7 @@ export default (sequelize, Sequelize) => {
       },
     },
     {
-      tablename: "orders",
+      tableName: "orders",
       timestamps: true,
       updatedAt: false,
     }

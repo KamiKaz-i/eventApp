@@ -33,7 +33,7 @@ export default (sequelize, Sequelize) => {
       },
     },
     {
-      tablename: "order_tickets",
+      tableName: "order_tickets",
       timestamps: false,
     }
   );

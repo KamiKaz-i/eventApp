@@ -26,7 +26,7 @@ export default (sequelize, Sequelize) => {
       },
     },
     {
-      tablename: "wallet_transactions",
+      tableName: "wallet_transactions",
       timestamps: true,
       updatedAt: false,
     }

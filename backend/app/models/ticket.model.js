@@ -26,7 +26,7 @@ export default (sequelize, Sequelize) => {
       },
     },
     {
-      tablename: "tickets",
+      tableName: "tickets",
       timestamps: false,
     }
   );

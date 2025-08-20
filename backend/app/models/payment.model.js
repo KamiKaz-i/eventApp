@@ -27,7 +27,7 @@ export default (sequelize, Sequelize) => {
       },
     },
     {
-      tablename: "payments",
+      tableName: "payments",
       timestamps: true,
       updatedAt: false,
     }

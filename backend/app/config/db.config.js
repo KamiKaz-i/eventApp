@@ -1,11 +1,12 @@
 import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize(
-  process.env.DATABASE,
-  process.env.NAME,
-  process.env.PASSWORD,
+  process.env.MYSQLDATABASE,
+  process.env.MYSQLUSER,
+  process.env.MYSQLPASSWORD,
   {
-    host: process.env.HOST,
+    host: process.env.MYSQLHOST,
+    port: process.env.MYSQLPORT,
     dialect: process.env.DIALECT,
     pool: {
       max: 5,

@@ -22,7 +22,7 @@ export default (sequelize, Sequelize) => {
       },
     },
     {
-      tablename: "wallets",
+      tableName: "wallets",
       timestamps: true,
       createdAt: false,
     }
