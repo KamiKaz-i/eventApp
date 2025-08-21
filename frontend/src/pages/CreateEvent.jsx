@@ -22,13 +22,13 @@ import { url } from "../url";
 export default function CreateEvent() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [questionArray] = useState([
-    "What are we calling this little venture?",
-    "So what's the deal with this thing? The details, the goods...",
-    "What kinda trouble is this?",
-    "When do I need to be there? Give me the day.",
-    "How many people are coming to this shindig?",
-    "Where's the gold? I mean, where's the spot?",
-    "How much is it gonna cost? I'm not doing this for free.",
+    "What will be the name of event?",
+    "What are the event details?",
+    "What kind of event are you planning?",
+    "When is the event?",
+    "How many people are you expecting?",
+    "Where will the event take place?",
+    "How much is it gonna cost?.",
   ]);
   const [selectOption, setSelectOption] = useState("Other");
   const [createEventForm, setCreateEventForm] = useState({
