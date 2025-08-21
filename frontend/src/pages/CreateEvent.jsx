@@ -27,7 +27,6 @@ export default function CreateEvent() {
     "What kind of event are you planning?",
     "When is the event?",
     "How many people are you expecting?",
-    "Where will the event take place?",
     "How much is it gonna cost?.",
   ]);
   const [selectOption, setSelectOption] = useState("Other");
