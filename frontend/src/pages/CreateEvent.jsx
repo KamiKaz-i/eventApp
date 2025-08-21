@@ -391,7 +391,7 @@ export default function CreateEvent() {
               </>
             )}
           </Stack>
-          {questionIndex < questionArray.length - 2 ? (
+          {questionIndex < questionArray.length - 1 ? (
             <Button
               disabled={isInputEmpty[questionIndex]}
               onClick={() => {
