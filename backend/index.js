@@ -24,6 +24,9 @@ app.use("/api/wallets", walletRouter);
 app.use("/api/wallet-transactions", walletTransactionRouter);
 app.use("/api/order-tickets", orderTicketRouter);
 app.use("/api/order", orderRouter);
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "alive" });
+});
 app.listen(process.env.PORT, () => {
   console.log(`running on port ${process.env.PORT}`);
 });
