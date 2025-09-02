@@ -65,7 +65,8 @@ export const getEvent = async (req, res) => {
 };
 export const getEvents = async (req, res) => {
   try {
-    const events = await eventService.getEvents();
+    const options = req.query;
+    const events = await eventService.getEvents(options);
     res.status(200).json(events);
   } catch (error) {
     res.status(500).json({

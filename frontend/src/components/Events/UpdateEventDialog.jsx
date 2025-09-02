@@ -168,9 +168,10 @@ export default function UpdateEventDialog({
               }}
               name="date"
               onChange={(newValue) => {
+                console.log(newValue);
                 setUpdateEventForm({
                   ...updateEventForm,
-                  date: `${newValue.$W}/${newValue.$D}/${newValue.$y}`,
+                  date: `${newValue.$M + 1}/${newValue.$D}/${newValue.$y}`,
                 });
               }}
               label="Event Date"

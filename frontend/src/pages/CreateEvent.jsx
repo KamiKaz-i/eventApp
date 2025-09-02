@@ -8,6 +8,7 @@ import {
   Button,
   FormControl,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -29,6 +30,7 @@ export default function CreateEvent() {
     "How many people are you expecting?",
     "How much is it gonna cost?",
   ]);
+  let navigate = useNavigate();
   const [selectOption, setSelectOption] = useState("Other");
   const [createEventForm, setCreateEventForm] = useState({
     title: "",
@@ -66,6 +68,7 @@ export default function CreateEvent() {
           type: createEventForm.type,
         }),
       });
+      navigate("/my-events");
     } catch (error) {
       console.log("error : ", error);
     }

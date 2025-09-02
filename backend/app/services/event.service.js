@@ -35,9 +35,9 @@ export const getEvent = async (eventId) => {
   }
 };
 
-export const getEvents = async () => {
+export const getEvents = async (options) => {
   try {
-    let events = await eventRepository.getEvents();
+    let events = await eventRepository.getEvents(options);
     if (!events) {
       throw new Error(`events not found`);
     }
