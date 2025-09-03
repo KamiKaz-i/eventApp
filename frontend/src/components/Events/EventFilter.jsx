@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
   TextField,
   Box,
@@ -12,19 +12,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-function EventFilter({
-  eventFilterForm,
-  setEventFilterForm,
-  searchParams,
-  setSearchParams,
-}) {
-  //   const [eventFilterForm, setEventFilterForm] = useState({
-  //     search: "",
-  //     priceGt: 0,
-  //     priceLt: 0,
-  //     eventType: "All Categories",
-  //     hasTickets: true,
-  //   });
+function EventFilter({ eventFilterForm, setEventFilterForm, setSearchParams }) {
   useEffect(() => {
     setSearchParams(eventFilterForm);
   }, [eventFilterForm]);
