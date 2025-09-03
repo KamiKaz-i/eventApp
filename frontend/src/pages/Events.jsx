@@ -3,13 +3,26 @@ import { useEffect, useState } from "react";
 import EventCard from "../components/Events/EventCard";
 import { Box, Stack } from "@mui/material";
 import { url } from "../url";
+import EventFilter from "../components/Events/EventFilter";
+import { useLocation } from "react-router";
+import { useSearchParams } from "react-router";
+
 export default function Events() {
+  let location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
+  const [eventFilterForm, setEventFilterForm] = useState({
+    search: searchParams.get("search"),
+    priceGt: searchParams.get("priceGt"),
+    priceLt: searchParams.get("priceLt"),
+    eventType: searchParams.get("eventType") || "All Categories",
+    hasTickets: searchParams.get("hasTickets") === "true",
+  });
   useEffect(() => {
     const getEvents = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`${url}/api/events`, {
+        const response = await fetch(`${url}/api/events/${location.search}`, {
           method: "GET",
           headers: {
             "Content-type": "application/json",
@@ -18,6 +31,8 @@ export default function Events() {
         });
         if (response.ok) {
           const events = await response.json();
+          console.log(location.search);
+          console.log(eventFilterForm);
           setEvents(events);
         }
       } catch (error) {
@@ -25,7 +40,7 @@ export default function Events() {
       }
     };
     getEvents();
-  }, []);
+  }, [eventFilterForm, searchParams]);
   return (
     <Box
       sx={{
@@ -36,7 +51,28 @@ export default function Events() {
       }}
     >
       <Navbar></Navbar>
-      <Box>
+
+      <Box
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+          mt: "3rem",
+          p: "1.5rem",
+        }}
+      >
+        <EventFilter
+          eventFilterForm={eventFilterForm}
+          setEventFilterForm={setEventFilterForm}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+        ></EventFilter>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         {events &&
           events.map((event) => (
             <Stack key={event.id}>

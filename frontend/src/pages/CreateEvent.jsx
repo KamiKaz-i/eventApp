@@ -8,7 +8,7 @@ import {
   Button,
   FormControl,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -112,6 +112,7 @@ export default function CreateEvent() {
         >
           {questionIndex > 0 ? (
             <Button
+              type="button"
               onClick={() => {
                 setQuestionIndex((questionIndex) => questionIndex - 1);
               }}
@@ -176,6 +177,11 @@ export default function CreateEvent() {
                           [questionIndex]: true,
                         });
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
                   value={createEventForm.title}
                   required
                   variant="outlined"
@@ -205,6 +211,11 @@ export default function CreateEvent() {
                           ...isInputEmpty,
                           [questionIndex]: true,
                         });
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
                   }}
                   required
                   value={createEventForm.description}
@@ -306,9 +317,15 @@ export default function CreateEvent() {
                 <TextField
                   sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
                   value={createEventForm.totalTickets}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
                   onChange={(e) => {
                     const amount = e.target.value;
                     const regex = /^[1-9]\d{0,4}$/;
+
                     if (regex.test(amount) || amount === "") {
                       setCreateEventForm({
                         ...createEventForm,
@@ -341,6 +358,11 @@ export default function CreateEvent() {
                   required
                   sx={{ width: { lg: "50%", md: "50%", xs: "75%" } }}
                   value={createEventForm.price}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
                   onChange={(e) => {
                     const amount = e.target.value;
                     const regex = /^[1-9]\d{0,4}(\.\d{0,2})?$/;
@@ -396,6 +418,7 @@ export default function CreateEvent() {
           </Stack>
           {questionIndex < questionArray.length - 1 ? (
             <Button
+              type="button"
               disabled={isInputEmpty[questionIndex]}
               onClick={() => {
                 setQuestionIndex((questionIndex) => questionIndex + 1);

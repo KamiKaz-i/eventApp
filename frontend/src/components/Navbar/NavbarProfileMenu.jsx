@@ -3,7 +3,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { Box, Typography, Avatar, Button } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import Logout from "@mui/icons-material/Logout";
 import WalletIcon from "@mui/icons-material/Wallet";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";

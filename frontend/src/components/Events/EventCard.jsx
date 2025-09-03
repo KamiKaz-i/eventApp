@@ -8,7 +8,7 @@ import {
   Paper,
   Button,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import EventIcon from "@mui/icons-material/Event";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TitleIcon from "@mui/icons-material/Title";
@@ -32,7 +32,7 @@ function EventCard({ event }) {
           p: { xs: 2, md: 4 },
         }}
       >
-        <Paper elevation={3} sx={{ p: 3 }}>
+        <Paper elevation={2} sx={{ p: 3 }}>
           <Box
             sx={{
               display: "flex",

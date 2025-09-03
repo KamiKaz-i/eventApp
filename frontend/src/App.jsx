@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router";
 import MyEvents from "./pages/MyEvents.jsx";
 import Login from "./pages/Login";
 import Register from "./pages/Register";

@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Stack } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import styles from "./Navbar.module.css";
 import NavbarProfileMenu from "./NavbarProfileMenu.jsx";
 //import Logo from "./Amphitheatre.svg?react";

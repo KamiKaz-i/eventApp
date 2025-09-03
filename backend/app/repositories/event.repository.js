@@ -36,7 +36,8 @@ export const getEventWithTicketInfo = async (eventId) => {
 };
 export const getEvents = async (options) => {
   try {
-    const { has_tickets, price, ...eventFilters } = options;
+    const { hasTickets, priceGt, priceLt, ...eventFilters } = options;
+    console.log(eventFilters);
     const where = {};
     const whereTicket = {};
     const priceCondition = {};
@@ -50,23 +51,27 @@ export const getEvents = async (options) => {
         },
       ],
     };
-    if (eventFilters.type) {
-      where.type = eventFilters.type;
+    if (eventFilters.eventType && eventFilters.eventType !== "All Categories") {
+      where.type = eventFilters.eventType;
     }
-    if (eventFilters.phrase) {
-      where.title = { [Op.startsWith]: eventFilters.phrase };
+    if (eventFilters.search) {
+      where.title = { [Op.startsWith]: eventFilters.search };
     }
-    if (has_tickets) {
-      whereTicket.quantity_available = { [Op.gt]: 0 };
+    if (hasTickets) {
+      if (hasTickets === "true") {
+        whereTicket.quantity_available = { [Op.gt]: 0 };
+      }
+      if (hasTickets === "false") {
+        whereTicket.quantity_available = { [Op.eq]: 0 };
+      }
     }
-
-    if (price?.gt) {
-      const priceGt = parseFloat(price.gt);
-      priceCondition[Op.gt] = priceGt;
+    if (priceGt) {
+      const priceGtParsed = parseFloat(priceGt);
+      priceCondition[Op.gt] = priceGtParsed;
     }
-    if (price?.lt) {
-      const priceLt = parseFloat(price.lt);
-      priceCondition[Op.lt] = priceLt;
+    if (priceLt) {
+      const priceLtParsed = parseFloat(priceLt);
+      priceCondition[Op.lt] = priceLtParsed;
     }
 
     if (Object.getOwnPropertySymbols(priceCondition).length > 0) {

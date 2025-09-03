@@ -12,7 +12,7 @@ import {
 
 import TitleIcon from "@mui/icons-material/Title";
 import ListIcon from "@mui/icons-material/List";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { userContext } from "../contexts/userContext";
 import { orderContext } from "../contexts/orderContext";
 import Navbar from "../components/Navbar/Navbar";
