@@ -12,9 +12,9 @@ export default function Events() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
   const [eventFilterForm, setEventFilterForm] = useState({
-    search: searchParams.get("search"),
-    priceGt: searchParams.get("priceGt"),
-    priceLt: searchParams.get("priceLt"),
+    search: searchParams.get("search") || "",
+    priceGt: searchParams.get("priceGt") || "",
+    priceLt: searchParams.get("priceLt") || "",
     eventType: searchParams.get("eventType") || "All Categories",
     hasTickets: searchParams.get("hasTickets") === "true",
   });
