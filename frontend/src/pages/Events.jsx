@@ -16,7 +16,7 @@ export default function Events() {
     priceGt: searchParams.get("priceGt") || "",
     priceLt: searchParams.get("priceLt") || "",
     eventType: searchParams.get("eventType") || "All Categories",
-    hasTickets: searchParams.get("hasTickets") === "true",
+    hasTickets: searchParams.get("hasTickets") === "true" || true,
   });
   useEffect(() => {
     const getEvents = async () => {
@@ -31,16 +31,16 @@ export default function Events() {
         });
         if (response.ok) {
           const events = await response.json();
-          console.log(location.search);
-          console.log(eventFilterForm);
           setEvents(events);
         }
       } catch (error) {
         console.log(error);
       }
     };
-    getEvents();
-  }, [eventFilterForm, searchParams]);
+    if (location.search) {
+      getEvents();
+    }
+  }, [eventFilterForm, searchParams, location.search]);
   return (
     <Box
       sx={{
