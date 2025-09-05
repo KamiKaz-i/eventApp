@@ -40,7 +40,7 @@ export default function Events() {
     if (location.search) {
       getEvents();
     }
-  }, [eventFilterForm, searchParams, location.search]);
+  }, [location.search]);
   return (
     <Box
       sx={{
