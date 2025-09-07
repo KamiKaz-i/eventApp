@@ -1,0 +1,46 @@
+/* Define the keyframes for the animation */
+@keyframes nextAnimation {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0;
+    transform: translateX(-450px);
+  }
+  
+  99% {
+    opacity:0;
+    transform: translateX(0);
+  }
+  100% {
+    opacity:1;
+    transform: translateX(0);
+  }
+}
+@keyframes prevAnimation {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0;
+    transform: translateX(450px);
+  }
+  
+  90% {
+    opacity:0;
+    transform: translateX(0);
+  }
+  91% {
+    opacity:1;
+    transform: translateX(0);
+  }
+}
+
+.animateNextQuestion {
+  animation: nextAnimation 0.4s ease-in forwards;
+}
+.animatePrevQuestion {
+  animation: prevAnimation 0.4s ease-in forwards;
+}

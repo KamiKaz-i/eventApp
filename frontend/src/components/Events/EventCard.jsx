@@ -21,23 +21,23 @@ function EventCard({ event }) {
         display: "flex",
         flexDirection: "column",
         bgcolor: "#F4F4F4",
+        alignItems: "center",
+        mt: "1rem",
       }}
     >
       <Stack
-        spacing={3}
         sx={{
           width: "100%",
           maxWidth: 1200,
-          mx: "auto",
-          p: { xs: 2, md: 4 },
+          mt: "2rem",
         }}
       >
-        <Paper elevation={2} sx={{ p: 3 }}>
+        <Paper elevation={4} sx={{ p: 3 }}>
           <Box
             sx={{
               display: "flex",
               flexDirection: { xs: "column", md: "row" },
-              gap: 4,
+              gap: { lg: 4, xs: 3 },
             }}
           >
             <Box
@@ -96,7 +96,12 @@ function EventCard({ event }) {
                 <Divider />
               </Stack>
 
-              <CardActions sx={{ pt: 3 }}>
+              <CardActions
+                sx={{
+                  pt: 3,
+                  display: "flex",
+                }}
+              >
                 <Button
                   onClick={() => {
                     navigate(`/events/${event.id}`);

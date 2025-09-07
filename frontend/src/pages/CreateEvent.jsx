@@ -9,12 +9,12 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router";
 import dayjs from "dayjs";
+import styles from "./CreateEvent.module.css";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuItem from "@mui/material/MenuItem";
@@ -29,7 +29,9 @@ export default function CreateEvent() {
     "How many people are you expecting?",
     "How much is it gonna cost?",
   ]);
+  const [animationClass, setAnimationClass] = useState("");
   let navigate = useNavigate();
+
   const [selectOption, setSelectOption] = useState("Other");
   const [createEventForm, setCreateEventForm] = useState({
     title: "",
@@ -72,7 +74,16 @@ export default function CreateEvent() {
       console.log("error : ", error);
     }
   }
+  function animatePrevQuestion() {
+    setAnimationClass(styles.animatePrevQuestion);
+  }
 
+  function animateNextQuestion() {
+    setAnimationClass(styles.animateNextQuestion);
+  }
+  function handleNextAnimationEnd() {
+    setAnimationClass("");
+  }
   return (
     <Box
       component="form"
@@ -99,6 +110,7 @@ export default function CreateEvent() {
           <Button
             type="button"
             onClick={() => {
+              animatePrevQuestion();
               setQuestionIndex((questionIndex) => questionIndex - 1);
             }}
             sx={{
@@ -140,6 +152,8 @@ export default function CreateEvent() {
             <>
               <Typography
                 variant="overline"
+                className={animationClass}
+                onAnimationEnd={handleNextAnimationEnd}
                 sx={{
                   fontWeight: 300,
                   fontSize: { lg: 30, md: 23, s: 40, xs: 17 },
@@ -209,6 +223,7 @@ export default function CreateEvent() {
           {questionIndex === 1 && (
             <>
               <Typography
+                className={animationClass}
                 variant="overline"
                 sx={{
                   fontWeight: 300,
@@ -279,6 +294,7 @@ export default function CreateEvent() {
           {questionIndex === 2 && (
             <>
               <Typography
+                className={animationClass}
                 variant="overline"
                 sx={{
                   fontWeight: 300,
@@ -307,7 +323,6 @@ export default function CreateEvent() {
                     },
                   }}
                   onChange={(e) => {
-                    console.log(e.target.name);
                     setCreateEventForm({
                       ...createEventForm,
                       [e.target.name]: e.target.value,
@@ -354,6 +369,7 @@ export default function CreateEvent() {
           {questionIndex === 3 && (
             <>
               <Typography
+                className={animationClass}
                 variant="overline"
                 sx={{
                   fontWeight: 300,
@@ -400,7 +416,6 @@ export default function CreateEvent() {
                   }}
                   name="date"
                   onChange={(newValue) => {
-                    console.log(newValue);
                     setCreateEventForm({
                       ...createEventForm,
                       date: `${newValue.$M + 1}/${newValue.$D}/${newValue.$y}`,
@@ -434,6 +449,7 @@ export default function CreateEvent() {
           {questionIndex === 4 && (
             <>
               <Typography
+                className={animationClass}
                 variant="overline"
                 sx={{
                   fontWeight: 300,
@@ -509,6 +525,7 @@ export default function CreateEvent() {
           {questionIndex === 5 && (
             <>
               <Typography
+                className={animationClass}
                 variant="overline"
                 sx={{
                   fontWeight: 300,
@@ -565,9 +582,6 @@ export default function CreateEvent() {
                 variant="contained"
                 type="submit"
                 size="large"
-                onClick={() => {
-                  console.log(createEventForm);
-                }}
                 sx={{
                   position: "relative",
                   bottom: "-3rem",
@@ -591,7 +605,9 @@ export default function CreateEvent() {
             type="button"
             disabled={isInputEmpty[questionIndex]}
             onClick={() => {
-              setQuestionIndex((questionIndex) => questionIndex + 1);
+              animateNextQuestion();
+
+              setQuestionIndex((prev) => prev + 1);
             }}
             sx={{
               height: "64px",

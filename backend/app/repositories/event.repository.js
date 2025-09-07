@@ -37,7 +37,6 @@ export const getEventWithTicketInfo = async (eventId) => {
 export const getEvents = async (options) => {
   try {
     const { hasTickets, priceGt, priceLt, ...eventFilters } = options;
-    console.log(eventFilters);
     const where = {};
     const whereTicket = {};
     const priceCondition = {};

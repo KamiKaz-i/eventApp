@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import {
   Card,
   CardActions,
@@ -16,9 +15,9 @@ import { userContext } from "../../contexts/userContext";
 import { orderContext } from "../../contexts/orderContext";
 import { url } from "../../url.jsx";
 
-export default function OrderSummary({ order }) {
+export default function OrderSummary() {
   const { user } = useContext(userContext);
-  const [, , fetchOrders, , setOrder] = useContext(orderContext);
+  const [, , fetchOrders, order, setOrder] = useContext(orderContext);
   const [error, setError] = useState(null);
 
   const handlePurchase = async () => {

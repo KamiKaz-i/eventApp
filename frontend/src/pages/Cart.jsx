@@ -5,8 +5,7 @@ import OrderTicketCard from "../components/Cart/OrderTicketCard";
 import OrderSummary from "../components/Cart/OrderSummary";
 import Navbar from "../components/Navbar/Navbar";
 export default function Cart() {
-  const [orderTickets, , , order] = useContext(orderContext);
-
+  const [orderTickets, , ,] = useContext(orderContext);
   if (orderTickets.length === 0) {
     return (
       <Box sx={{ minHeight: "100vh", bgcolor: "#F4F4F4" }}>
@@ -27,9 +26,8 @@ export default function Cart() {
             sx={{ flex: 2, width: "100%", p: 3, borderRadius: 2 }}
           >
             <Typography
-              variant="h5"
-              component="h2"
-              sx={{ mb: 3, fontWeight: 600 }}
+              variant="overline"
+              sx={{ mb: 3, fontWeight: 400, fontSize: 22 }}
             >
               Cart is empty
             </Typography>
@@ -87,7 +85,7 @@ export default function Cart() {
         </Paper>
 
         <Box sx={{ flex: 1, width: "100%", position: "sticky", top: 90 }}>
-          <OrderSummary order={order} />
+          <OrderSummary />
         </Box>
       </Stack>
     </Box>

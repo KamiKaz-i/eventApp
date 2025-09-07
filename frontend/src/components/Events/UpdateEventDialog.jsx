@@ -127,7 +127,6 @@ export default function UpdateEventDialog({
             <InputLabel id="Event-type">Event Type</InputLabel>
             <Select
               onChange={(e) => {
-                console.log(e.target.name);
                 setUpdateEventForm({
                   ...updateEventForm,
                   [e.target.name]: e.target.value,
@@ -168,7 +167,6 @@ export default function UpdateEventDialog({
               }}
               name="date"
               onChange={(newValue) => {
-                console.log(newValue);
                 setUpdateEventForm({
                   ...updateEventForm,
                   date: `${newValue.$M + 1}/${newValue.$D}/${newValue.$y}`,

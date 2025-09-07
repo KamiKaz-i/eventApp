@@ -3,11 +3,16 @@ export const getOrderTicket = async (req, res) => {
   try {
     const userId = req.params.userId;
     const result = await orderTicketService.getOrderTicket(userId);
+
     res.status(200).json(result);
   } catch (error) {
     return res.status(404).json({ message: "Order not found" });
   }
 };
+// if (error.code === "ORDER_NOT_FOUND") {
+//       return res.status(200).json({ message: "Order not found" });
+//     }
+//     return res.status(404).json({ message: "err" });
 export const deleteOrderTicket = async (req, res) => {
   try {
     const ticketOrderId = req.params.ticketOrderId;

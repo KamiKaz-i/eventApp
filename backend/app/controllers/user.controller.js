@@ -6,7 +6,6 @@ export const register = async (req, res) => {
   };
   try {
     const freshAccount = await userService.register(user);
-    console.log(freshAccount);
 
     res.status(200).json(freshAccount);
   } catch (error) {

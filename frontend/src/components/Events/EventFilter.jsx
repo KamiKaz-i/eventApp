@@ -18,14 +18,14 @@ function EventFilter({ eventFilterForm, setEventFilterForm, setSearchParams }) {
   }, [eventFilterForm]);
   return (
     <Paper
-      elevation={3}
+      elevation={7}
       sx={{
         display: "flex",
-        flexDirection: { lg: "column" },
+        flexDirection: "column",
         p: "1.5rem",
         width: "100%",
-        maxWidth: 1150,
-        gap: "0.5rem",
+        maxWidth: 1200,
+        gap: { lg: "0.5rem" },
       }}
     >
       <Box sx={{ width: "100%" }}>
@@ -60,14 +60,14 @@ function EventFilter({ eventFilterForm, setEventFilterForm, setSearchParams }) {
         sx={{
           width: "100%",
           display: "flex",
-          flexDirection: { lg: "row" },
-          gap: "4rem",
+          flexDirection: { lg: "row", md: "row", xs: "column" },
+          gap: { lg: "4rem", xs: "1.5rem" },
         }}
       >
         <Box sx={{ width: "100%" }}>
           <FormControl
             color="black"
-            sx={{ width: { lg: "100%", md: "50%", xs: "75%" } }}
+            sx={{ width: { lg: "100%", md: "100%", xs: "100%" } }}
           >
             <InputLabel></InputLabel>
             <Select

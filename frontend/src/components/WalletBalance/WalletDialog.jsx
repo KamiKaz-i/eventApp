@@ -46,8 +46,6 @@ export default function WalletDialog({
           }
         );
         if (response.ok) {
-          console.log(actionType);
-
           getWallet();
         }
       } catch (error) {

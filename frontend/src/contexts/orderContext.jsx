@@ -14,7 +14,6 @@ export const OrderProvider = ({ children }) => {
     if (!user) {
       return;
     }
-
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
@@ -28,7 +27,6 @@ export const OrderProvider = ({ children }) => {
         }
       );
       const res = await response.json();
-
       if (res.message === "Order not found") {
         setOrderTickets([]);
       }

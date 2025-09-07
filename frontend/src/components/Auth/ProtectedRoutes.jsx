@@ -6,7 +6,6 @@ import { useContext } from "react";
 import { userContext } from "../../contexts/userContext.jsx";
 import { url } from "../../url.jsx";
 export default function ProtectedRoutes() {
-  //const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
   const { user, setUser } = useContext(userContext);
   useEffect(() => {
@@ -16,7 +15,6 @@ export default function ProtectedRoutes() {
     } else {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   async function validateUser(token) {
     try {
@@ -41,7 +39,6 @@ export default function ProtectedRoutes() {
             : { username: res.username, id: res.id, walletId: res.walletId }
         );
       } else {
-        console.log("failed to auth");
         localStorage.removeItem("token");
       }
 
