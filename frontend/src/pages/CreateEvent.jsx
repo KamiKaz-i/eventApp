@@ -123,7 +123,7 @@ export default function CreateEvent() {
               top: "-4.5rem",
             }}
           >
-            <ArrowBackIcon></ArrowBackIcon>
+            <ArrowBackIcon fontSize="large"></ArrowBackIcon>
           </Button>
         ) : (
           <Button
@@ -619,7 +619,7 @@ export default function CreateEvent() {
               top: "-4.5rem",
             }}
           >
-            <ArrowForwardIcon></ArrowForwardIcon>
+            <ArrowForwardIcon fontSize="large"></ArrowForwardIcon>
           </Button>
         ) : (
           <Box
