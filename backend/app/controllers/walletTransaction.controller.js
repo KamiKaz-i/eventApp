@@ -15,6 +15,7 @@ export const getTransactions = async (req, res) => {
 };
 
 export const postWithdraw = async (req, res) => {
+  // walidacja czy jest null body.amount
   let walletId = req.body.walletId;
   let transactionType = req.body.transactionType;
   let amount = parseFloat(req.body.amount) || null;

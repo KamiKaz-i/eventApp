@@ -13,9 +13,12 @@ import {
 import { useContext, useState } from "react";
 import { userContext } from "../../contexts/userContext";
 import { orderContext } from "../../contexts/orderContext";
+import { walletContext } from "../../contexts/walletContext.jsx";
 import { url } from "../../url.jsx";
 
 export default function OrderSummary() {
+  const { wallet } = useContext(walletContext);
+
   const { user } = useContext(userContext);
   const [, , fetchOrders, order, setOrder] = useContext(orderContext);
   const [error, setError] = useState(null);

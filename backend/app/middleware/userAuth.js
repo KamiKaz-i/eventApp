@@ -24,15 +24,13 @@ export const authorization = async (req, res, next) => {
     },
     include: [{ model: Wallet, attributes: ["id"] }],
   });
-
-  req.user.id = user.id;
-  req.user.walletId = user.Wallet.id;
-
   if (user.length === 0) {
     return res.status(404).json({
       message: "user doesn't exist",
     });
   }
+  req.user.id = user.id;
+  req.user.walletId = user.Wallet.id;
 
   next();
 };
