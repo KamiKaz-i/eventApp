@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Card,
   CardActions,
@@ -55,31 +56,57 @@ export default function OrderSummary() {
   };
 
   return (
-    <Card elevation={3} sx={{ borderRadius: 2 }}>
+    <Card
+      elevation={0}
+      sx={{
+        borderRadius: 0,
+        border: "1px solid #e0e0e0",
+        bgcolor: "#ffffff",
+      }}
+    >
       <CardContent>
-        <Typography variant="h6" gutterBottom fontWeight="bold">
+        <Typography
+          variant="h6"
+          gutterBottom
+          fontWeight="bold"
+          sx={{ color: "black" }}
+        >
           Order Summary
         </Typography>
 
         <List dense>
-          <Divider component="li" sx={{ my: 1 }} />
+          <Divider component="li" sx={{ my: 1, borderColor: "#e0e0e0" }} />
           <ListItem sx={{ py: 1 }}>
-            <ListItemText primary="Total" sx={{ fontWeight: "bold" }} />
-            <Typography fontWeight="bold">${order.total_price}</Typography>
+            <ListItemText
+              primary="Total"
+              primaryTypographyProps={{
+                style: { fontWeight: 500, color: "black", fontSize: 16 },
+              }}
+            />
+            <Typography sx={{ color: "black", fontWeight: 500, fontSize: 16 }}>
+              ${order?.total_price || 0}
+            </Typography>
           </ListItem>
         </List>
       </CardContent>
 
       <CardActions sx={{ p: 2, flexDirection: "column" }}>
         {error && (
-          <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
+          <Alert
+            severity="error"
+            sx={{
+              width: "100%",
+              mb: 2,
+              borderRadius: 0,
+            }}
+          >
             {error}
           </Alert>
         )}
 
         <Button
           fullWidth
-          variant="contained"
+          variant="outlined"
           size="large"
           onClick={handlePurchase}
           sx={{
@@ -87,9 +114,14 @@ export default function OrderSummary() {
             py: 1.5,
             fontWeight: "bold",
             fontSize: "1rem",
-            bgcolor: "#3f3f3f",
+            borderRadius: 0,
+            textTransform: "uppercase",
+            color: "black",
+            borderColor: "black",
             ":hover": {
-              bgcolor: "#5f5f5f",
+              bgcolor: "black",
+              color: "white",
+              borderColor: "black",
             },
           }}
         >

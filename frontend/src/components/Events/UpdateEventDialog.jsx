@@ -18,6 +18,18 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { url } from "../../url.jsx";
+
+const inputStyle = {
+  width: { lg: "80%", xs: "100%" },
+  "& label.Mui-focused": { color: "black" },
+  "& .MuiOutlinedInput-root": {
+    borderRadius: 0,
+    "&.Mui-focused fieldset": {
+      borderColor: "black",
+    },
+  },
+};
+
 export default function UpdateEventDialog({
   open,
   handleClose,
@@ -27,7 +39,7 @@ export default function UpdateEventDialog({
   const [updateEventForm, setUpdateEventForm] = useState({
     title: event.title,
     description: event.description,
-    date: dayjs(),
+    date: dayjs(event.date) || dayjs(),
     location: "",
     price: event.price,
     type: event.type,
@@ -67,33 +79,45 @@ export default function UpdateEventDialog({
     <Dialog
       open={open}
       onClose={handleClose}
-      sx={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+      PaperProps={{
+        elevation: 0,
+        sx: {
+          borderRadius: 0,
+          border: "1px solid #000",
+          width: "100%",
+          maxWidth: "600px",
+          m: 2,
+        },
       }}
     >
       <DialogTitle
         sx={{
+          textAlign: "center",
+          fontWeight: 300,
+          textTransform: "uppercase",
+          letterSpacing: "1px",
+          borderBottom: "1px solid #eee",
+          pb: 2,
+          bgcolor: "white",
           color: "black",
-          bgcolor: "#e0e0e0",
-          pt: 3,
-          display: "flex",
-          justifyContent: "center",
         }}
       >
         Update Event
       </DialogTitle>
-      <DialogContent sx={{ padding: 0, bgcolor: "#F0F0e0", width: "500px" }}>
+
+      <DialogContent sx={{ padding: 0, bgcolor: "white" }}>
         <Stack
           spacing={3}
           alignItems="center"
-          sx={{ p: 3, bgcolor: "#e0e0e0" }}
+          sx={{
+            p: 4,
+            bgcolor: "white",
+            width: "100%",
+          }}
         >
           <TextField
             defaultValue={updateEventForm.title}
-            sx={{ width: { lg: "60%", xs: "75%" } }}
+            sx={inputStyle}
             onChange={(e) => {
               setUpdateEventForm({
                 ...updateEventForm,
@@ -102,14 +126,13 @@ export default function UpdateEventDialog({
             }}
             required
             variant="outlined"
-            color="black"
             name="title"
             label="Title"
             size="medium"
-          ></TextField>
+          />
           <TextField
             defaultValue={updateEventForm.description}
-            sx={{ width: { lg: "60%", xs: "75%" } }}
+            sx={inputStyle}
             onChange={(e) => {
               setUpdateEventForm({
                 ...updateEventForm,
@@ -121,11 +144,16 @@ export default function UpdateEventDialog({
             name="description"
             label="Description"
             size="medium"
-            color="black"
-          ></TextField>
-          <FormControl color="black" sx={{ width: { lg: "60%", xs: "75%" } }}>
-            <InputLabel id="Event-type">Event Type</InputLabel>
+          />
+          <FormControl sx={inputStyle}>
+            <InputLabel
+              id="Event-type"
+              sx={{ "&.Mui-focused": { color: "black" } }}
+            >
+              Event Type
+            </InputLabel>
             <Select
+              labelId="Event-type"
               onChange={(e) => {
                 setUpdateEventForm({
                   ...updateEventForm,
@@ -134,7 +162,13 @@ export default function UpdateEventDialog({
               }}
               value={updateEventForm.type}
               name="type"
-              label="type"
+              label="Event Type"
+              sx={{
+                borderRadius: 0,
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "black",
+                },
+              }}
             >
               <MenuItem value={"Concert"}>Concert</MenuItem>
               <MenuItem value={"Gallery"}>Gallery</MenuItem>
@@ -143,41 +177,33 @@ export default function UpdateEventDialog({
               <MenuItem value={"Other"}>Other</MenuItem>
             </Select>
           </FormControl>
+
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               disablePast
               minDate={dayjs()}
-              defaultValue={dayjs()}
+              defaultValue={dayjs(event.date)}
               slotProps={{
                 textField: {
                   required: true,
                   readOnly: true,
-                },
-              }}
-              sx={{
-                width: { lg: "60%", xs: "75%" },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": {
-                    border: "2px solid black",
-                  },
-                },
-                "& .MuiInputLabel-root.Mui-focused": {
-                  color: "black",
+                  sx: inputStyle,
                 },
               }}
               name="date"
               onChange={(newValue) => {
                 setUpdateEventForm({
                   ...updateEventForm,
-                  date: `${newValue.$M + 1}/${newValue.$D}/${newValue.$y}`,
+                  date: newValue,
                 });
               }}
               label="Event Date"
             />
           </LocalizationProvider>
+
           <TextField
             required
-            sx={{ width: { lg: "60%", xs: "75%" } }}
+            sx={inputStyle}
             value={updateEventForm.price}
             onChange={(e) => {
               const amount = e.target.value;
@@ -193,32 +219,50 @@ export default function UpdateEventDialog({
             name="price"
             label="Price"
             size="medium"
-            color="black"
-          ></TextField>
+          />
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ bgcolor: "#e0e0e0", paddingTop: 5 }}>
+
+      <DialogActions
+        sx={{
+          justifyContent: "center",
+          pb: 4,
+          pt: 2,
+          gap: 2,
+          bgcolor: "white",
+        }}
+      >
         <Button
+          onClick={handleClose}
           sx={{
-            color: "white",
-            bgcolor: "#3f3f3f",
+            color: "black",
+            borderRadius: 0,
+            textTransform: "uppercase",
+            fontWeight: 500,
+            px: 4,
             ":hover": {
-              bgcolor: "#5f5f5f",
+              bgcolor: "#f5f5f5",
             },
           }}
-          onClick={handleClose}
         >
           Cancel
         </Button>
 
         <Button
           onClick={handleConfirm}
-          variant="contained"
+          variant="outlined"
           sx={{
-            color: "white",
-            bgcolor: "#3f3f3f",
+            px: 4,
+            py: 1,
+            borderRadius: 0,
+            color: "black",
+            borderColor: "black",
+            textTransform: "uppercase",
+            fontWeight: "bold",
             ":hover": {
-              bgcolor: "#5f5f5f",
+              bgcolor: "black",
+              color: "white",
+              borderColor: "black",
             },
           }}
         >

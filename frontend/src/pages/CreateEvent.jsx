@@ -579,19 +579,18 @@ export default function CreateEvent() {
               ></TextField>
               <Button
                 disabled={isInputEmpty[questionIndex]}
-                variant="contained"
+                variant="outlined"
                 type="submit"
                 size="large"
                 sx={{
-                  position: "relative",
-                  bottom: "-3rem",
-                  width: "150px",
-                  borderRadius: 1,
-                  textTransform: "none",
-                  fontWeight: 600,
-                  bgcolor: "#3f3f3f",
+                  px: 4,
+                  borderRadius: 0,
+                  color: "black",
+                  borderColor: "black",
                   ":hover": {
-                    bgcolor: "#5f5f5f",
+                    bgcolor: "black",
+                    color: "white",
+                    borderColor: "black",
                   },
                 }}
               >

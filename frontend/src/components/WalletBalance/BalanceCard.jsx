@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { walletContext } from "../../contexts/walletContext";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import { url } from "../../url.jsx";
+
 function BalanceCard() {
   const { wallet, setWallet } = useContext(walletContext);
   const [open, setOpen] = useState(false);
@@ -34,15 +35,18 @@ function BalanceCard() {
 
   return (
     <Card
+      elevation={0}
       sx={{
         width: { lg: "60%", md: "80%", xs: "100%" },
         margin: { lg: "24px auto", xs: "16px 0" },
         p: 3,
-        borderRadius: 2,
-        boxShadow: 3,
+        borderRadius: 0,
+        border: "1px solid #e0e0e0",
+        bgcolor: "#ffffff",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        transition: "all 0.3s ease",
       }}
     >
       <Stack direction="row" spacing={2} alignItems="center">
@@ -58,17 +62,20 @@ function BalanceCard() {
       </Stack>
 
       <Button
-        variant="contained"
+        variant="outlined"
         onClick={() => setOpen(true)}
         sx={{
           px: 3,
           py: 1.5,
-          borderRadius: 1,
+          borderRadius: 0,
           textTransform: "none",
           fontWeight: 600,
-          bgcolor: "#3f3f3f",
+          color: "black",
+          borderColor: "black",
           ":hover": {
-            bgcolor: "#5f5f5f",
+            bgcolor: "black",
+            color: "white",
+            borderColor: "black",
           },
         }}
       >

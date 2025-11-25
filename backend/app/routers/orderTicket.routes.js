@@ -23,4 +23,9 @@ orderTicketRouter.get(
   authorization,
   orderTicketController.getOrderTicket
 );
+orderTicketRouter.post(
+  "/return",
+  authorization,
+  orderTicketController.returnTicket
+);
 export default orderTicketRouter;

@@ -1,4 +1,5 @@
 import * as orderTicketService from "../services/orderTicket.service.js";
+import * as walletTransactionService from "../services/walletTransaction.service.js";
 export const getOrderTicket = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -55,5 +56,20 @@ export const postOrderTicket = async (req, res) => {
     res.status(500).json({
       message: error.message,
     });
+  }
+};
+export const returnTicket = async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const ticketId = req.body.ticketId;
+    const returnTicketQuantity = req.body.quantity;
+    const result = await walletTransactionService.returnTicket(
+      userId,
+      ticketId,
+      returnTicketQuantity
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

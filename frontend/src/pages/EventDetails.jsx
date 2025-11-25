@@ -22,6 +22,7 @@ import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import PersonIcon from "@mui/icons-material/Person";
 import { url } from "../url";
+
 export default function EventDetails() {
   const { user } = useContext(userContext);
   const [, , fetchOrders] = useContext(orderContext);
@@ -29,6 +30,7 @@ export default function EventDetails() {
   const [event, setEvent] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
   const getEvent = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -89,7 +91,7 @@ export default function EventDetails() {
           display: "flex",
           flexDirection: "column",
           minHeight: "100vh",
-          bgcolor: "#F4F4F4",
+          bgcolor: "#f8f8f8", // Off-white background for contrast
         }}
       >
         <Navbar />
@@ -104,17 +106,33 @@ export default function EventDetails() {
           }}
         >
           {success && (
-            <Alert severity="success" onClose={() => setSuccess(null)}>
+            <Alert
+              severity="success"
+              onClose={() => setSuccess(null)}
+              sx={{ borderRadius: 0 }}
+            >
               {success}
             </Alert>
           )}
           {error && (
-            <Alert severity="error" onClose={() => setError(null)}>
+            <Alert
+              severity="error"
+              onClose={() => setError(null)}
+              sx={{ borderRadius: 0 }}
+            >
               {error}
             </Alert>
           )}
 
-          <Paper elevation={3} sx={{ p: 3 }}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 4,
+              borderRadius: 0, // Sharp corners
+              border: "1px solid #e0e0e0", // Minimalist border
+              bgcolor: "#ffffff",
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
@@ -126,11 +144,12 @@ export default function EventDetails() {
                 sx={{
                   width: { xs: "100%", md: "40%" },
                   height: { lg: 370, md: 370, xs: 275 },
-                  bgcolor: "gray",
-                  borderRadius: "1rem",
+                  bgcolor: "#f5f5f5",
+                  borderRadius: 0, // Sharp corners for image container
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  position: "relative",
                 }}
               >
                 <img
@@ -140,7 +159,8 @@ export default function EventDetails() {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    borderRadius: "0.5rem",
+                    borderRadius: 0, // Sharp corners for image
+                    display: "block",
                   }}
                 ></img>
               </Box>
@@ -148,19 +168,19 @@ export default function EventDetails() {
               <Box sx={{ flex: 1 }}>
                 <Stack spacing={2}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <TitleIcon color="black" />
+                    <TitleIcon sx={{ color: "black" }} />
                     <Typography variant="body1">
                       <strong>Title:</strong> {event.title}
                     </Typography>
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <ListIcon color="black" />
+                    <ListIcon sx={{ color: "black" }} />
                     <Typography variant="body1">
                       <strong>Type:</strong> {event.type}
                     </Typography>
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <EventIcon color="black" />
+                    <EventIcon sx={{ color: "black" }} />
                     <Typography variant="body1">
                       <strong>Date:</strong>{" "}
                       {new Date(event?.date).toLocaleDateString()}
@@ -168,19 +188,19 @@ export default function EventDetails() {
                   </Box>
 
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <AttachMoneyIcon color="black" />
+                    <AttachMoneyIcon sx={{ color: "black" }} />
                     <Typography variant="body1">
                       <strong>Price:</strong> ${event.Ticket?.price || "N/A"}
                     </Typography>
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <ConfirmationNumberIcon color="black" />
+                    <ConfirmationNumberIcon sx={{ color: "black" }} />
                     <Typography variant="body1">
                       <strong>Total Tickets: </strong> {event.total_tickets}
                     </Typography>
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <ConfirmationNumberIcon color="black" />
+                    <ConfirmationNumberIcon sx={{ color: "black" }} />
                     <Typography variant="body1">
                       <strong>Tickets Available: </strong>{" "}
                       {event?.Ticket.quantity_available}
@@ -189,26 +209,27 @@ export default function EventDetails() {
                   <Box
                     sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}
                   >
-                    <PersonIcon color="black" />
+                    <PersonIcon sx={{ color: "black" }} />
                     <Typography variant="body1">
                       <strong>Created by:</strong> {event.owner}
                     </Typography>
                   </Box>
-                  <Divider />
+
+                  <Divider sx={{ borderColor: "#f0f0f0" }} />
 
                   <Box
                     sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}
                   >
-                    <DescriptionIcon color="black" sx={{ mt: 0.5 }} />
+                    <DescriptionIcon sx={{ color: "black", mt: 0.5 }} />
                     <Typography variant="body1">
                       <strong>Description:</strong> {event.description}
                     </Typography>
                   </Box>
                 </Stack>
 
-                <CardActions sx={{ justifyContent: "flex-end", mt: 2 }}>
+                <CardActions sx={{ justifyContent: "flex-end", mt: 2, p: 0 }}>
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     size="large"
                     disabled={event.Ticket.quantity_available === 0}
                     onClick={handleAddToCart}
@@ -218,9 +239,19 @@ export default function EventDetails() {
                       py: 1.5,
                       fontWeight: "bold",
                       fontSize: "1rem",
-                      bgcolor: "#3f3f3f",
+                      borderRadius: 0, // Sharp corners
+                      color: "black",
+                      borderColor: "black",
+                      textTransform: "uppercase", // Matching other buttons
                       ":hover": {
-                        bgcolor: "#5f5f5f",
+                        bgcolor: "black",
+                        color: "white",
+                        borderColor: "black",
+                      },
+                      // Custom disabled style to maintain layout
+                      "&.Mui-disabled": {
+                        color: "#999",
+                        borderColor: "#e0e0e0",
                       },
                     }}
                   >

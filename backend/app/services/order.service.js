@@ -10,6 +10,8 @@ export const getOrder = async (userId) => {
       const eventDate = orderTicket.Ticket.Event.date;
       if (!tickets[eventId]) {
         tickets[eventId] = {
+          eventId: eventId,
+          ticketId: orderTicket.ticket_id,
           eventTitle: eventTitle,
           ticketCount: 0,
         };

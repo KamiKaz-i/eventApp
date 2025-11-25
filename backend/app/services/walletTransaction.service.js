@@ -133,19 +133,126 @@ export const purchase = async (walletId, transactionType, orderId) => {
     if (order.status === "paid") {
       throw new Error("order already paid");
     }
-
-    await paymentRepository.createPayment({
-      order_id: orderId,
-      wallet_transaction_id: walletTransanction.id,
-      method: "wallet",
-      status: "paid",
-      transaction: dbTransaction,
-    });
+    await paymentRepository.createPayment(
+      {
+        order_id: orderId,
+        wallet_transaction_id: walletTransanction.id,
+        method: "wallet",
+        status: "paid",
+      },
+      dbTransaction
+    );
     order.status = "paid";
-    await order.save();
-    await ticketRepository.updateTicketQuantityAvaiable(orderId);
+    await order.save({ transaction: dbTransaction });
+    await ticketRepository.updateTicketQuantityAvaiable(orderId, dbTransaction);
     await dbTransaction.commit();
   } catch (error) {
+    if (dbTransaction) await dbTransaction.rollback();
+    throw error;
+  }
+};
+export const returnTicket = async (userId, ticketId, returnTicketQuantity) => {
+  let dbTransaction;
+  try {
+    dbTransaction = await db.sequelize.transaction();
+
+    const orders = await orderRepository.getPaidOrder(userId);
+
+    let allMatches = [];
+    let totalOwned = 0;
+
+    for (const order of orders) {
+      if (order.Order_tickets) {
+        const matches = order.Order_tickets.filter(
+          (ot) => ot.ticket_id === parseInt(ticketId)
+        );
+
+        for (const match of matches) {
+          match.parentOrder = order;
+          allMatches.push(match);
+          totalOwned += match.quantity;
+        }
+      }
+    }
+
+    if (totalOwned < returnTicketQuantity) {
+      throw new Error(
+        `You cannot return ${returnTicketQuantity} tickets. You only own ${totalOwned} in total.`
+      );
+    }
+    const ticketDetails = await ticketRepository.getTicket(ticketId);
+    const sellerId = ticketDetails.Event.organizer_id;
+
+    const sellerWallet = await walletRepository.getWallet(sellerId);
+    const userWallet = await walletRepository.getWallet(userId);
+
+    if (!sellerWallet) throw new Error("Seller wallet not found");
+    if (!userWallet) throw new Error("User wallet not found");
+
+    let remainingToReturn = returnTicketQuantity;
+    for (const targetOrderTicket of allMatches) {
+      if (remainingToReturn <= 0) break;
+      const canTake = Math.min(targetOrderTicket.quantity, remainingToReturn);
+      const unitPrice =
+        parseFloat(targetOrderTicket.subtotal_price) /
+        targetOrderTicket.quantity;
+      const refundChunk = unitPrice * canTake;
+      await walletTransactionRepository.createTransaction(
+        {
+          wallet_id: sellerWallet.id,
+          amount: refundChunk,
+          transaction_type: "withdraw",
+        },
+        dbTransaction
+      );
+      await walletRepository.increment(
+        sellerWallet.id,
+        -refundChunk,
+        dbTransaction
+      );
+      await walletTransactionRepository.createTransaction(
+        {
+          wallet_id: userWallet.id,
+          amount: refundChunk,
+          transaction_type: "deposit",
+        },
+        dbTransaction
+      );
+      await walletRepository.increment(
+        userWallet.id,
+        refundChunk,
+        dbTransaction
+      );
+      if (targetOrderTicket.quantity > canTake) {
+        const newQuantity = targetOrderTicket.quantity - canTake;
+        const newSubtotal =
+          parseFloat(targetOrderTicket.subtotal_price) - refundChunk;
+
+        await targetOrderTicket.update(
+          { quantity: newQuantity, subtotal_price: newSubtotal },
+          { transaction: dbTransaction }
+        );
+      } else {
+        await targetOrderTicket.destroy({ transaction: dbTransaction });
+      }
+      await targetOrderTicket.parentOrder.increment(
+        { total_price: -refundChunk },
+        { transaction: dbTransaction }
+      );
+
+      remainingToReturn -= canTake;
+    }
+    const ticketModel = await ticketRepository.getTicket(ticketId);
+    await ticketModel.increment(
+      { quantity_available: returnTicketQuantity },
+      { transaction: dbTransaction }
+    );
+    await dbTransaction.commit();
+    return {
+      message: `Successfully returned ${returnTicketQuantity} tickets`,
+    };
+  } catch (error) {
+    if (dbTransaction) await dbTransaction.rollback();
     throw error;
   }
 };

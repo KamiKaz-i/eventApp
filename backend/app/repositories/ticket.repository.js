@@ -13,7 +13,7 @@ export const updateTicket = async (eventId, parsedPrice) => {
     { where: { event_id: eventId } }
   );
 };
-export const updateTicketQuantityAvaiable = async (orderId) => {
+export const updateTicketQuantityAvaiable = async (orderId, dbTransaction) => {
   await db.sequelize.query(
     `UPDATE tickets
                INNER JOIN order_tickets ON tickets.id = order_tickets.ticket_id
@@ -23,6 +23,7 @@ export const updateTicketQuantityAvaiable = async (orderId) => {
     {
       replacements: { orderId: orderId },
       type: db.Sequelize.QueryTypes.UPDATE,
+      transaction: dbTransaction,
     }
   );
 };
