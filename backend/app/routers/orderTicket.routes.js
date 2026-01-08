@@ -3,25 +3,21 @@ import * as orderTicketController from "../controllers/orderTicket.controller.js
 import { authorization } from "../middleware/userAuth.js";
 let orderTicketRouter = express.Router();
 
-orderTicketRouter.post(
-  "/",
-  authorization,
-  orderTicketController.postOrderTicket
-);
+orderTicketRouter.post("/", authorization, orderTicketController.create);
 orderTicketRouter.put(
   "/:ticketOrderId",
   authorization,
-  orderTicketController.putOrderTicket
+  orderTicketController.update
 );
 orderTicketRouter.delete(
   "/:ticketOrderId",
   authorization,
-  orderTicketController.deleteOrderTicket
+  orderTicketController.remove
 );
 orderTicketRouter.get(
   "/order/:userId",
   authorization,
-  orderTicketController.getOrderTicket
+  orderTicketController.get
 );
 orderTicketRouter.post(
   "/return",

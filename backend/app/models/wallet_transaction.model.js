@@ -21,7 +21,14 @@ export default (sequelize, Sequelize) => {
         },
       },
       transaction_type: {
-        type: DataTypes.ENUM("purchase", "deposit", "withdraw", "sell"),
+        type: DataTypes.ENUM(
+          "purchase",
+          "deposit",
+          "withdraw",
+          "sell",
+          "refund",
+          "refund-charge"
+        ),
         allowNull: false,
       },
     },

@@ -30,7 +30,7 @@ export default function EventDetails() {
   const [event, setEvent] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-
+  console.log(event);
   const getEvent = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -76,7 +76,6 @@ export default function EventDetails() {
       if (!response.ok) {
         throw new Error(res.message);
       }
-
       setSuccess("Ticket added to cart");
       fetchOrders();
     } catch (err) {
@@ -91,7 +90,7 @@ export default function EventDetails() {
           display: "flex",
           flexDirection: "column",
           minHeight: "100vh",
-          bgcolor: "#f8f8f8", // Off-white background for contrast
+          bgcolor: "#f8f8f8",
         }}
       >
         <Navbar />
@@ -128,8 +127,8 @@ export default function EventDetails() {
             elevation={0}
             sx={{
               p: 4,
-              borderRadius: 0, // Sharp corners
-              border: "1px solid #e0e0e0", // Minimalist border
+              borderRadius: 0,
+              border: "1px solid #e0e0e0",
               bgcolor: "#ffffff",
             }}
           >
@@ -145,7 +144,7 @@ export default function EventDetails() {
                   width: { xs: "100%", md: "40%" },
                   height: { lg: 370, md: 370, xs: 275 },
                   bgcolor: "#f5f5f5",
-                  borderRadius: 0, // Sharp corners for image container
+                  borderRadius: 0,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -159,7 +158,7 @@ export default function EventDetails() {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    borderRadius: 0, // Sharp corners for image
+                    borderRadius: 0,
                     display: "block",
                   }}
                 ></img>
@@ -190,7 +189,7 @@ export default function EventDetails() {
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <AttachMoneyIcon sx={{ color: "black" }} />
                     <Typography variant="body1">
-                      <strong>Price:</strong> ${event.Ticket?.price || "N/A"}
+                      <strong>Price:</strong> {event.Ticket?.price}$
                     </Typography>
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -211,7 +210,7 @@ export default function EventDetails() {
                   >
                     <PersonIcon sx={{ color: "black" }} />
                     <Typography variant="body1">
-                      <strong>Created by:</strong> {event.owner}
+                      <strong>Organizer:</strong> {event.owner}
                     </Typography>
                   </Box>
 
@@ -231,7 +230,10 @@ export default function EventDetails() {
                   <Button
                     variant="outlined"
                     size="large"
-                    disabled={event.Ticket.quantity_available === 0}
+                    disabled={
+                      event.Ticket.quantity_available === 0 ||
+                      new Date(event.date) < new Date()
+                    }
                     onClick={handleAddToCart}
                     startIcon={<ConfirmationNumberIcon />}
                     sx={{
@@ -239,16 +241,15 @@ export default function EventDetails() {
                       py: 1.5,
                       fontWeight: "bold",
                       fontSize: "1rem",
-                      borderRadius: 0, // Sharp corners
+                      borderRadius: 0,
                       color: "black",
                       borderColor: "black",
-                      textTransform: "uppercase", // Matching other buttons
+                      textTransform: "uppercase",
                       ":hover": {
                         bgcolor: "black",
                         color: "white",
                         borderColor: "black",
                       },
-                      // Custom disabled style to maintain layout
                       "&.Mui-disabled": {
                         color: "#999",
                         borderColor: "#e0e0e0",

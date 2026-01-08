@@ -36,7 +36,7 @@ function EventFilter({ eventFilterForm, setEventFilterForm, setSearchParams }) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        p: { xs: 3, md: 4 },
+        p: { xs: 3, md: 3.5 },
         width: "100%",
         maxWidth: 1200,
         gap: { lg: "0.5rem" },
@@ -196,7 +196,7 @@ function EventFilter({ eventFilterForm, setEventFilterForm, setSearchParams }) {
             }
             label={
               <Typography sx={{ color: "#000", fontWeight: 400 }}>
-                Has tickets left
+                Available
               </Typography>
             }
           />

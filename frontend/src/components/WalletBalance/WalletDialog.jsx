@@ -19,6 +19,7 @@ export default function WalletDialog({
   handleClose,
   getWallet,
   walletId,
+  setError,
 }) {
   const [amount, setAmount] = useState("");
   const [actionType, setActionType] = useState(null);
@@ -49,6 +50,10 @@ export default function WalletDialog({
         );
         if (response.ok) {
           getWallet();
+        } else {
+          const err = await response.json();
+          const errorMessage = err.message;
+          setError(errorMessage);
         }
       } catch (error) {
         console.log(error);
@@ -76,13 +81,11 @@ export default function WalletDialog({
         sx={{
           color: "black",
           bgcolor: "#ffffff",
-          pt: 3,
+          pt: 6,
           borderBottom: "1px solid #eee",
           textAlign: "center",
         }}
-      >
-        Select Action
-      </DialogTitle>
+      ></DialogTitle>
 
       <DialogContent sx={{ padding: 4, bgcolor: "#ffffff" }}>
         <Stack spacing={3} alignItems="center">
@@ -184,6 +187,7 @@ export default function WalletDialog({
           <Button
             onClick={handleConfirm}
             variant="outlined"
+            disabled={amount.length < 1}
             sx={{
               px: 4,
               borderRadius: 0,

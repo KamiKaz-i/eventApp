@@ -27,7 +27,7 @@ export default function CreateEvent() {
     "What kind of event are you planning?",
     "When is the event?",
     "How many people are you expecting?",
-    "How much is it gonna cost?",
+    "How much is it going to cost?",
   ]);
   const [animationClass, setAnimationClass] = useState("");
   let navigate = useNavigate();
@@ -151,7 +151,6 @@ export default function CreateEvent() {
           {questionIndex === 0 && (
             <>
               <Typography
-                variant="overline"
                 className={animationClass}
                 onAnimationEnd={handleNextAnimationEnd}
                 sx={{
@@ -224,7 +223,6 @@ export default function CreateEvent() {
             <>
               <Typography
                 className={animationClass}
-                variant="overline"
                 sx={{
                   fontWeight: 300,
                   fontSize: { lg: 30, md: 23, s: 40, xs: 17 },
@@ -295,7 +293,6 @@ export default function CreateEvent() {
             <>
               <Typography
                 className={animationClass}
-                variant="overline"
                 sx={{
                   fontWeight: 300,
                   fontSize: { lg: 30, md: 23, s: 40, xs: 17 },
@@ -370,7 +367,6 @@ export default function CreateEvent() {
             <>
               <Typography
                 className={animationClass}
-                variant="overline"
                 sx={{
                   fontWeight: 300,
                   fontSize: { lg: 30, md: 23, s: 40, xs: 17 },
@@ -450,7 +446,6 @@ export default function CreateEvent() {
             <>
               <Typography
                 className={animationClass}
-                variant="overline"
                 sx={{
                   fontWeight: 300,
                   fontSize: { lg: 30, md: 23, s: 40, xs: 17 },
@@ -526,7 +521,6 @@ export default function CreateEvent() {
             <>
               <Typography
                 className={animationClass}
-                variant="overline"
                 sx={{
                   fontWeight: 300,
                   fontSize: { lg: 30, md: 23, s: 40, xs: 17 },

@@ -22,6 +22,7 @@ export const register = async (user) => {
     if (newUser.dataValues.id) {
       wallet.user_id = newUser.dataValues.id;
       wallet.balance = 0;
+      wallet.pending_balance = 0;
       const usersWallet = await walletRepository.createWallet(wallet);
     }
     return { userCreated: true, user: newUser.dataValues };
@@ -41,6 +42,7 @@ export const get = async () => {
 
 export const login = async (user) => {
   try {
+    console.log(user);
     const result = await userRepository.getUserByName(user.username);
     if (!result) {
       throw new Error(`invalid credentials`);

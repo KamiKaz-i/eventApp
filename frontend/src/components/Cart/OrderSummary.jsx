@@ -84,7 +84,7 @@ export default function OrderSummary() {
               }}
             />
             <Typography sx={{ color: "black", fontWeight: 500, fontSize: 16 }}>
-              ${order?.total_price || 0}
+              {order?.total_price || 0}$
             </Typography>
           </ListItem>
         </List>

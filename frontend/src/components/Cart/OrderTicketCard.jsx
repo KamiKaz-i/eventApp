@@ -160,7 +160,7 @@ export default function OrderTicketCard({ orderTicket }) {
               </Typography>
             </Box>
             <Typography variant="h6" sx={{ fontWeight: 400, color: "black" }}>
-              ${orderTicket.subtotal_price}
+              {orderTicket.subtotal_price}$
             </Typography>
           </Stack>
         </CardContent>

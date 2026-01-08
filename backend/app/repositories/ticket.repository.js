@@ -28,12 +28,13 @@ export const updateTicketQuantityAvaiable = async (orderId, dbTransaction) => {
   );
 };
 
-export const getTicket = async (ticketId) => {
+export const getTicket = async (ticketId, t = null) => {
   const resultTicket = await Ticket.findOne({
     where: {
       id: ticketId,
     },
     include: [{ model: Event }],
+    transaction: t,
   });
   return resultTicket;
 };

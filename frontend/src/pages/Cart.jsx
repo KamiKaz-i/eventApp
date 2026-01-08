@@ -86,7 +86,7 @@ export default function Cart() {
             sx={{ mb: 3, fontWeight: 400 }}
           >
             Cart - {orderTickets.length}{" "}
-            {orderTickets.length === 1 ? "item" : "items"}
+            {orderTickets.length === 1 ? "ticket" : "tickets"}
           </Typography>
 
           <Divider sx={{ mb: 3, borderColor: "#f0f0f0" }} />

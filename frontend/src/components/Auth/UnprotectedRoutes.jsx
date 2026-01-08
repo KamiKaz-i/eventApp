@@ -33,7 +33,6 @@ export default function UnprotectedRoutes() {
       if (res.username) {
         setUser(res.username);
       } else {
-        console.log("failed to auth");
         localStorage.removeItem("token");
       }
       setLoading(false);

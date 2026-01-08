@@ -30,7 +30,7 @@ function EventCard({ event }) {
         sx={{
           width: "100%",
           maxWidth: 1000,
-          mt: 2,
+          mt: 1,
         }}
       >
         <Paper

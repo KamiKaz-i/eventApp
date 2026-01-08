@@ -99,11 +99,11 @@ export const getOrderById = async (orderId) => {
   }
 };
 
-export const increment = async (orderId, increment) => {
+export const increment = async (orderId, increment, t = null) => {
   try {
     await Order.increment(
       { total_price: increment },
-      { where: { id: orderId, status: "pending" } }
+      { where: { id: orderId, status: "pending" }, transaction: t }
     );
   } catch (error) {
     throw new Error(error);
@@ -117,13 +117,14 @@ export const deleteOrder = async (orderId) => {
   }
 };
 
-export const findOrCreate = async (userId) => {
+export const findOrCreate = async (userId, t = null) => {
   try {
     const order = await Order.findOrCreate({
       where: { user_id: userId, status: "pending" },
       defaults: {
         total_price: 0,
       },
+      transaction: t,
     });
     return order;
   } catch (error) {

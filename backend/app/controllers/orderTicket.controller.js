@@ -1,6 +1,7 @@
 import * as orderTicketService from "../services/orderTicket.service.js";
 import * as walletTransactionService from "../services/walletTransaction.service.js";
-export const getOrderTicket = async (req, res) => {
+import { RunInTransaction } from "../utils/transaction.js";
+export const get = async (req, res) => {
   try {
     const userId = req.params.userId;
     const result = await orderTicketService.getOrderTicket(userId);
@@ -10,11 +11,7 @@ export const getOrderTicket = async (req, res) => {
     return res.status(404).json({ message: "Order not found" });
   }
 };
-// if (error.code === "ORDER_NOT_FOUND") {
-//       return res.status(200).json({ message: "Order not found" });
-//     }
-//     return res.status(404).json({ message: "err" });
-export const deleteOrderTicket = async (req, res) => {
+export const remove = async (req, res) => {
   try {
     const ticketOrderId = req.params.ticketOrderId;
     await orderTicketService.deleteOrderTicket(ticketOrderId);
@@ -25,7 +22,7 @@ export const deleteOrderTicket = async (req, res) => {
     });
   }
 };
-export const putOrderTicket = async (req, res) => {
+export const update = async (req, res) => {
   try {
     const quantity = req.body.quantity;
     const ticketOrderId = req.params.ticketOrderId;
@@ -40,24 +37,33 @@ export const putOrderTicket = async (req, res) => {
     });
   }
 };
-export const postOrderTicket = async (req, res) => {
+export const create = async (req, res) => {
   try {
     const userId = req.body.userId;
     const ticketId = req.body.ticketId;
     const quantity = req.body.quantity;
-    const result = await orderTicketService.postOrderTicket(
-      userId,
-      ticketId,
-      quantity
-    );
-
+    if (!userId || !ticketId || !quantity) {
+      return res.status(400).json({
+        message: "missing fields",
+      });
+    }
+    const result = await RunInTransaction((transaction) => {
+      return orderTicketService.AddTicketToOrder(
+        userId,
+        ticketId,
+        quantity,
+        transaction
+      );
+    });
     res.status(200).json(result);
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       message: error.message,
     });
   }
 };
+
 export const returnTicket = async (req, res) => {
   try {
     const userId = req.body.userId;

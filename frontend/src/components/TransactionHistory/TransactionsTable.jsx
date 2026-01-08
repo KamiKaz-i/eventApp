@@ -17,12 +17,28 @@ export default function TransactionTable({ history }) {
       flex: 1,
       headerAlign: "left",
       align: "left",
+      valueGetter: (value) => {
+        if (!value) return 0;
+        return Number(value);
+      },
+      valueFormatter: (value) => {
+        if (value == null) return "";
+        return `${value.toFixed(2)} $`;
+      },
     },
     { field: "transaction_type", headerName: "Type ", flex: 1 },
     {
       field: "createdAt",
       headerName: "Date",
       flex: 1,
+      type: "dateTime",
+      valueGetter: (value) => {
+        if (!value) return null;
+        const [datePart, timePart] = value.split(" ");
+        const [day, month, year] = datePart.split("/");
+        const [hour, minute, second] = timePart.split(":");
+        return new Date(year, month - 1, day, hour, minute, second);
+      },
     },
   ];
   const paginationModel = { page: 0, pageSize: 30 };

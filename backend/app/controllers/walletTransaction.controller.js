@@ -19,19 +19,34 @@ export const postWithdraw = async (req, res) => {
   let walletId = req.body.walletId;
   let transactionType = req.body.transactionType;
   let amount = parseFloat(req.body.amount) || null;
-  const updatedWallet = await walletTransactionService.withdraw(
-    walletId,
-    amount,
-    transactionType
-  );
-  res.status(200).json({
-    wallet: updatedWallet.dataValues,
-  });
+  if (!amount || amount <= 0) {
+    return res.status(400).json({ message: "specify the amount" });
+  }
+  try {
+    const updatedWallet = await walletTransactionService.withdraw(
+      walletId,
+      amount,
+      transactionType
+    );
+    res.status(200).json({
+      wallet: updatedWallet.dataValues,
+    });
+  } catch (error) {
+    if (error.message === "insufficient funds") {
+      return res.status(409).json({
+        message: "insufficient funds",
+      });
+    }
+    res.status(500).json({ message: "server error" });
+  }
 };
 export const postDeposit = async (req, res) => {
   const walletId = req.body.walletId;
   const transactionType = req.body.transactionType;
   const amount = parseFloat(req.body.amount) || null;
+  if (!amount || amount <= 0) {
+    return res.status(400).json({ message: "specify the amount" });
+  }
   const updatedWallet = await walletTransactionService.deposit(
     walletId,
     amount,

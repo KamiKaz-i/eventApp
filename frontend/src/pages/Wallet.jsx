@@ -1,9 +1,10 @@
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Alert } from "@mui/material";
 import Navbar from "../components/Navbar/Navbar";
-
+import { useState } from "react";
 import BalanceCard from "../components/WalletBalance/BalanceCard";
 import TransactionHistory from "../components/TransactionHistory/TransactionHistory";
 function Wallet() {
+  const [error, setError] = useState(null);
   return (
     <Box
       sx={{
@@ -23,7 +24,21 @@ function Wallet() {
           alignItems: "center",
         }}
       >
-        <BalanceCard />
+        {error && (
+          <Alert
+            severity="error"
+            sx={{
+              width: "80%",
+              mb: 2,
+              mt: 3,
+              borderRadius: 0,
+            }}
+            onClose={() => setError(null)}
+          >
+            {error}
+          </Alert>
+        )}
+        <BalanceCard setError={setError} />
         <TransactionHistory />
       </Stack>
     </Box>

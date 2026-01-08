@@ -50,7 +50,6 @@ function MyEventCard({ event, getEvents }) {
             },
           }}
         >
-          {/* Image Section */}
           <Box
             sx={{
               width: { xs: "100%", md: "35%" },
@@ -78,7 +77,6 @@ function MyEventCard({ event, getEvents }) {
             />
           </Box>
 
-          {/* Content Section */}
           <Box
             sx={{
               flex: 1,
@@ -109,11 +107,11 @@ function MyEventCard({ event, getEvents }) {
                 </Typography>
               </Box>
 
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <AttachMoneyIcon sx={{ color: "black" }} />
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography variant="body1" sx={{ color: "black" }}>
                   <strong>Price:</strong> {event.price}
                 </Typography>
+                <AttachMoneyIcon sx={{ color: "black" }} />
               </Box>
 
               <Divider sx={{ borderColor: "#f0f0f0" }} />

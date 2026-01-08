@@ -25,7 +25,7 @@ import userModel from "../models/user.model.js";
 import eventModel from "../models/event.model.js";
 import orderModel from "../models/order.model.js";
 import order_ticketModel from "../models/order_ticket.model.js";
-import paymentModel from "../models/payment.model.js";
+
 import ticketModel from "../models/ticket.model.js";
 import wallet_transactionModel from "../models/wallet_transaction.model.js";
 import walletModel from "../models/wallet.model.js";
@@ -33,7 +33,7 @@ db.Event = eventModel(sequelize, Sequelize);
 db.User = userModel(sequelize, Sequelize);
 db.Order = orderModel(sequelize, Sequelize);
 db.Order_ticket = order_ticketModel(sequelize, Sequelize);
-db.Payment = paymentModel(sequelize, Sequelize);
+
 db.Ticket = ticketModel(sequelize, Sequelize);
 db.Wallet_transaction = wallet_transactionModel(sequelize, Sequelize);
 db.Wallet = walletModel(sequelize, Sequelize);

@@ -2,7 +2,7 @@ import * as walletTransactionRepository from "../repositories/walletTransaction.
 import * as walletRepository from "../repositories/wallet.repository.js";
 import * as orderRepository from "../repositories/order.repository.js";
 import * as orderTicketRepository from "../repositories/orderTicket.repository.js";
-import * as paymentRepository from "../repositories/payment.reposistory.js";
+
 import * as ticketRepository from "../repositories/ticket.repository.js";
 import db from "../config/db.config.js";
 export const getTransactions = async (walletId) => {
@@ -83,7 +83,7 @@ export const purchase = async (walletId, transactionType, orderId) => {
 
     const sellerEarnings = {};
     let totalPrice = 0;
-
+    console.log("1");
     for (let orderTicket of orderTickets) {
       sellerEarnings[orderTicket.Ticket.Event.User.Wallet.id] =
         (parseFloat(sellerEarnings[orderTicket.Ticket.Event.User.Wallet.id]) ||
@@ -133,15 +133,7 @@ export const purchase = async (walletId, transactionType, orderId) => {
     if (order.status === "paid") {
       throw new Error("order already paid");
     }
-    await paymentRepository.createPayment(
-      {
-        order_id: orderId,
-        wallet_transaction_id: walletTransanction.id,
-        method: "wallet",
-        status: "paid",
-      },
-      dbTransaction
-    );
+
     order.status = "paid";
     await order.save({ transaction: dbTransaction });
     await ticketRepository.updateTicketQuantityAvaiable(orderId, dbTransaction);
@@ -201,7 +193,7 @@ export const returnTicket = async (userId, ticketId, returnTicketQuantity) => {
         {
           wallet_id: sellerWallet.id,
           amount: refundChunk,
-          transaction_type: "withdraw",
+          transaction_type: "refund-charge",
         },
         dbTransaction
       );
@@ -214,7 +206,7 @@ export const returnTicket = async (userId, ticketId, returnTicketQuantity) => {
         {
           wallet_id: userWallet.id,
           amount: refundChunk,
-          transaction_type: "deposit",
+          transaction_type: "refund",
         },
         dbTransaction
       );

@@ -65,7 +65,7 @@ export default function NavbarProfileMenu() {
               display: { xs: "none", sm: "block" },
             }}
           >
-            {user.username}
+            {user.username.toLowerCase()}
           </Typography>
           <KeyboardArrowDownIcon
             sx={{

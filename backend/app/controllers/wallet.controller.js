@@ -5,6 +5,7 @@ export const getWallet = async (req, res) => {
     res.status(200).json({
       id: wallet.id,
       balance: wallet.balance,
+      pendingBalance: wallet.pending_balance,
       updatedAt: wallet.updatedAt,
     });
   } catch (error) {

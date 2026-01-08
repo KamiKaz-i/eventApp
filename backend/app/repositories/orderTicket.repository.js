@@ -128,7 +128,8 @@ export const createOrderTicket = async (
   orderId,
   ticketId,
   subtotalPrice,
-  quantity
+  quantity,
+  t = null
 ) => {
   try {
     const result = await OrderTicket.findOrCreate({
@@ -140,6 +141,7 @@ export const createOrderTicket = async (
         subtotal_price: subtotalPrice,
         quantity: quantity,
       },
+      transaction: t,
     });
 
     return result;

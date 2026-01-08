@@ -20,7 +20,12 @@ import { useContext, useState } from "react";
 import { userContext } from "../../contexts/userContext";
 import { url } from "../../url";
 
-export default function TicketCard({ order, onReturnSuccess }) {
+export default function TicketCard({
+  order,
+  onReturnSuccess,
+  setSuccess,
+  setError,
+}) {
   const { user } = useContext(userContext);
   const [showReturnControls, setShowReturnControls] = useState(false);
   const [returnQuantity, setReturnQuantity] = useState(1);
@@ -55,11 +60,11 @@ export default function TicketCard({ order, onReturnSuccess }) {
 
       if (response.ok) {
         const data = await response.json();
-        alert(data.message);
+        setSuccess(data.message);
         if (onReturnSuccess) onReturnSuccess();
       } else {
         const data = await response.json();
-        alert(data.message || "Failed to return ticket");
+        setError(data.message);
       }
     } catch (error) {
       console.log(error);

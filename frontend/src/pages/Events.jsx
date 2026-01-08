@@ -56,7 +56,7 @@ export default function Events() {
         sx={{
           justifyContent: "center",
           display: "flex",
-          mt: "3rem",
+          mt: "1.5rem",
           p: "1.5rem",
         }}
       >

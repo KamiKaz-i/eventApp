@@ -19,6 +19,7 @@ export const WalletProvider = ({ children }) => {
       });
       if (response.ok) {
         const wallet = await response.json();
+        console.log(wallet);
         setWallet(wallet);
       }
     } catch (error) {

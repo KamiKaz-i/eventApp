@@ -1,7 +1,7 @@
 import * as orderTicketRepository from "../repositories/orderTicket.repository.js";
 import * as orderRepository from "../repositories/order.repository.js";
 import * as ticketRepository from "../repositories/ticket.repository.js";
-
+import { RunInTransaction } from "../utils/transaction.js";
 export const getOrderTicket = async (userId) => {
   try {
     const result = await orderRepository.getPendingOrder(userId);
@@ -109,38 +109,40 @@ export const putOrderTicket = async (quantity, ticketOrderId) => {
   }
 };
 
-export const postOrderTicket = async (userId, ticketId, quantity) => {
-  try {
-    const ticket = await ticketRepository.getTicket(ticketId);
-    if (ticket.Event.organizer_id === userId) {
-      throw new Error("You can't buy tickets for your own event");
-    }
-    let priceOfTicket = ticket.price;
-    let quantityAvailable = ticket.quantity_available;
-    let subtotalPrice = quantity * priceOfTicket;
-    const [order, alreadyExisted] = await orderRepository.findOrCreate(userId);
-    if (quantity > quantityAvailable) {
-      throw new Error("insufficient quantity of tickets available");
-    }
-
-    const [orderTicket, createdOrderTicket] =
-      await orderTicketRepository.createOrderTicket(
-        order.id,
-        ticketId,
-        subtotalPrice,
-        quantity
-      );
-    if (!createdOrderTicket) {
-      throw new Error("Ticket is already in the cart");
-    }
-    await orderRepository.increment(order.id, subtotalPrice);
-    return {
-      order: order,
-      ticketId: ticketId,
-      quantity: quantity,
-      orderTicket: orderTicket,
-    };
-  } catch (error) {
-    throw error;
+export const AddTicketToOrder = async (
+  userId,
+  ticketId,
+  quantity,
+  transaction = null
+) => {
+  const ticket = await ticketRepository.getTicket(ticketId, transaction);
+  if (!ticket) {
+    throw new Error("Ticket not found");
   }
+  if (ticket.Event.organizer_id === userId) {
+    throw new Error("You can't buy tickets for your own event");
+  }
+  const subtotalPrice = quantity * ticket.price;
+  const [order] = await orderRepository.findOrCreate(userId, transaction);
+  if (quantity > ticket.quantity_available) {
+    throw new Error("Insufficient tickets available");
+  }
+  const [orderTicket, createdOrderTicket] =
+    await orderTicketRepository.createOrderTicket(
+      order.id,
+      ticketId,
+      subtotalPrice,
+      quantity,
+      transaction
+    );
+  if (!createdOrderTicket) {
+    throw new Error("Ticket is already in the cart");
+  }
+  await orderRepository.increment(order.id, subtotalPrice, transaction);
+  return {
+    order: order,
+    ticketId: ticketId,
+    quantity: quantity,
+    orderTicket: orderTicket,
+  };
 };
