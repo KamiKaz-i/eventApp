@@ -61,7 +61,9 @@ export const getMyEvents = async (userId) => {
 export const postEvent = async (event, ticket) => {
   try {
     const result = await eventRepository.createEvent(event);
+    console.log("1");
     await ticketRepository.createTicket(ticket, result.id);
+
     return { message: "noice", data: result };
   } catch (error) {
     throw error;

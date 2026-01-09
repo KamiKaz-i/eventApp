@@ -34,6 +34,23 @@ export const getEventWithTicketInfo = async (eventId) => {
     throw error;
   }
 };
+export const findEventsForRelease = async (t) => {
+  const events = await Event.findAll({
+    where: {
+      date: {
+        [Op.lt]: new Date(),
+      },
+      isFinished: false,
+    },
+    include: [
+      {
+        model: Ticket,
+      },
+    ],
+    transaction: t,
+  });
+  return events;
+};
 export const getEvents = async (options) => {
   try {
     const { hasTickets, priceGt, priceLt, ...eventFilters } = options;

@@ -83,7 +83,7 @@ export const purchase = async (walletId, transactionType, orderId) => {
 
     const sellerEarnings = {};
     let totalPrice = 0;
-    console.log("1");
+
     for (let orderTicket of orderTickets) {
       sellerEarnings[orderTicket.Ticket.Event.User.Wallet.id] =
         (parseFloat(sellerEarnings[orderTicket.Ticket.Event.User.Wallet.id]) ||
@@ -107,11 +107,13 @@ export const purchase = async (walletId, transactionType, orderId) => {
       amount: totalPrice,
       transaction_type: transactionType,
     };
+
     const walletTransanction =
       await walletTransactionRepository.createTransaction(
         transaction,
         dbTransaction
       );
+
     await walletRepository.increment(walletId, -totalPrice, dbTransaction);
     for (const [sellerWalletId, amount] of Object.entries(sellerEarnings)) {
       await walletTransactionRepository.createTransaction(
@@ -122,7 +124,11 @@ export const purchase = async (walletId, transactionType, orderId) => {
         },
         dbTransaction
       );
-      await walletRepository.increment(sellerWalletId, amount, dbTransaction);
+      await walletRepository.incrementPendingBalance(
+        sellerWalletId,
+        amount,
+        dbTransaction
+      );
     }
 
     const order = await orderRepository.getOneOrder(orderId);
@@ -197,7 +203,7 @@ export const returnTicket = async (userId, ticketId, returnTicketQuantity) => {
         },
         dbTransaction
       );
-      await walletRepository.increment(
+      await walletRepository.incrementPendingBalance(
         sellerWallet.id,
         -refundChunk,
         dbTransaction

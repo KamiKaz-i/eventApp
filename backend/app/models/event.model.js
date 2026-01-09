@@ -23,7 +23,11 @@ export default (sequelize, Sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-
+      isFinished: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       total_tickets: {
         type: DataTypes.INTEGER,
         allowNull: false,

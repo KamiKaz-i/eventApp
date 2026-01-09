@@ -99,6 +99,7 @@ export const postEvent = async (req, res) => {
       date,
       total_tickets,
       type,
+      isFinished: 0,
     };
     const ticket = {
       price,
