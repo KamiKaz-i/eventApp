@@ -15,7 +15,7 @@ export const authorization = async (req, res, next) => {
     }
     req.user = decoded;
   });
-  if (!req.user.username) {
+  if (!req.user || !req.user.username) {
     return res.status(404).json({ error: "missing user" });
   }
   let user = await User.findOne({
